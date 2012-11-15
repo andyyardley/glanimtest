@@ -5,7 +5,6 @@
 //  Created by Andy on 09/11/2012.
 //  Copyright (c) 2012 Venalicium Ltd. All rights reserved.
 //
-
 #import <UIKit/UIKit.h>
 
 #import "TTAppDelegate.h"
