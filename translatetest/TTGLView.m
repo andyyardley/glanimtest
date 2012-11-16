@@ -8,6 +8,7 @@
 
 #import "TTGLView.h"
 #import "TTGLPatchGrid.h"
+#import "TTGLImage.h"
 #import "TTShaderService.h"
 #import "TTGLTextureFrameBuffer.h"
 #import <GLKit/GLKit.h>
@@ -42,8 +43,8 @@
 @property (strong, nonatomic) TTGLPatchGrid *textureGrid;
 @property (strong, nonatomic) TTGLPatchGrid *reflectionGrid;
 
-@property (strong, nonatomic) TTGLPatchGrid *leftAvatarGrid;
-@property (strong, nonatomic) TTGLPatchGrid *rightAvatarGrid;
+@property (strong, nonatomic) TTGLImage     *leftAvatarGrid;
+@property (strong, nonatomic) TTGLImage     *rightAvatarGrid;
 
 @property (assign, nonatomic) GLuint        colorRenderBuffer;
 
@@ -131,9 +132,6 @@
     _textureGrid = [[TTGLPatchGrid alloc] initWithShaderName:kSimpleTextureShader];
     _reflectionGrid = [[TTGLPatchGrid alloc] initWithShaderName:kBlurTextureShader];
     
-    _leftAvatarGrid = [[TTGLPatchGrid alloc] initWithShaderName:kSimpleTextureShader];
-    _rightAvatarGrid = [[TTGLPatchGrid alloc] initWithShaderName:kSimpleTextureShader];
-    
     [self setupGradientPatchGrid];
     [self setupTexturePatchGrid];
     
@@ -162,8 +160,11 @@
         [_playerImageNames addObject:[self.delegate detailView:self imageNameForPlayerAtIndex:i]];
     }
     
-    _leftAvatarGrid.texture = [[TTGLTextureService sharedInstance] textureForName:[_playerImageNames objectAtIndex:0]];   
-    _rightAvatarGrid.texture = [[TTGLTextureService sharedInstance] textureForName:[_playerImageNames objectAtIndex:1]];
+    _leftAvatarGrid = [TTGLImage imageNamed:[_playerImageNames objectAtIndex:0]];
+    _rightAvatarGrid = [TTGLImage imageNamed:[_playerImageNames objectAtIndex:1]];
+    
+//    _leftAvatarGrid.texture = [[TTGLTextureService sharedInstance] textureForName:[_playerImageNames objectAtIndex:0]];
+//    _rightAvatarGrid.texture = [[TTGLTextureService sharedInstance] textureForName:[_playerImageNames objectAtIndex:1]];
     
     _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(render:)];
     [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];

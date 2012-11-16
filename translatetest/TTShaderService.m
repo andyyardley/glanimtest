@@ -50,7 +50,7 @@ static TTShaderService *instance = nil;
 - (TTShaderProgram *)shaderForKey:(NSString *)key
 {
     TTShaderProgram *program = [_programs objectForKey:key];
-    NSAssert(program != nil, @"Missing Shader Program");
+    NSAssert(program != nil, key);
     return program;
 }
 
