@@ -13,7 +13,7 @@
 
 - (id)init
 {
-    if (self = [super initWithShaderName:kSimpleTextureShader]) {
+    if ((self = [super initWithShaderName:kSimpleTextureShader])) {
         
     }
     return self;

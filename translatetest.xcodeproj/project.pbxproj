@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01DC1CD01656988B00160EF4 /* TTGLLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DC1CCF1656988B00160EF4 /* TTGLLabel.m */; };
 		A10AB794164EB6C20071C923 /* TTShaderService.m in Sources */ = {isa = PBXBuildFile; fileRef = A10AB793164EB6C20071C923 /* TTShaderService.m */; };
 		A10AB797164EC0CD0071C923 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10AB796164EC0CD0071C923 /* OpenGLES.framework */; };
 		A10AB79A164FB5FB0071C923 /* TTGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = A10AB799164FB5FB0071C923 /* TTGLView.m */; };
@@ -44,6 +45,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		01DC1CCE1656988B00160EF4 /* TTGLLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGLLabel.h; sourceTree = "<group>"; };
+		01DC1CCF1656988B00160EF4 /* TTGLLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGLLabel.m; sourceTree = "<group>"; };
 		A10AB792164EB6C20071C923 /* TTShaderService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTShaderService.h; sourceTree = "<group>"; };
 		A10AB793164EB6C20071C923 /* TTShaderService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTShaderService.m; sourceTree = "<group>"; };
 		A10AB796164EC0CD0071C923 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -191,6 +194,8 @@
 				A13580DB1656892E00A39F11 /* redundantcode */,
 				A13580DD16568A4C00A39F11 /* TTGLImage.h */,
 				A13580DE16568A4C00A39F11 /* TTGLImage.m */,
+				01DC1CCE1656988B00160EF4 /* TTGLLabel.h */,
+				01DC1CCF1656988B00160EF4 /* TTGLLabel.m */,
 			);
 			path = translatetest;
 			sourceTree = "<group>";
@@ -301,6 +306,7 @@
 				A1B876041655601B00B4781A /* TTGLTextureService.m in Sources */,
 				A13580CB1656406C00A39F11 /* TTGLMeshService.m in Sources */,
 				A13580DF16568A4D00A39F11 /* TTGLImage.m in Sources */,
+				01DC1CD01656988B00160EF4 /* TTGLLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

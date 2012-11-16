@@ -61,27 +61,39 @@ static TTGLTextureService *instance = nil;
 
 - (id)initWithName:(NSString *)fileName
 {
-    
-    if (self = [super init]) {
+    _fileName = fileName;
 
-        _fileName = fileName;
+    UIImage *image = [UIImage imageNamed:fileName];
+    if (!image) {
+        NSLog(@"Failed to load image %@", fileName);
+        exit(1);
+    }
+    
+    return [self initWithSize:image.size drawingBlock:^(CGContextRef context) {
         
-        CGImageRef spriteImage = [UIImage imageNamed:fileName].CGImage;
-        if (!spriteImage) {
-            NSLog(@"Failed to load image %@", fileName);
-            exit(1);
-        }
-        
-        size_t width = CGImageGetWidth(spriteImage);
-        size_t height = CGImageGetHeight(spriteImage);
+        [image drawInRect:CGRectMake(0.0f, 0.0f, image.size.width, image.size.height)];
+    }];
+}
+
+- (id)initWithSize:(CGSize)size drawingBlock:(TTGLImageDrawingBlock)drawingBlock
+{
+    if ((self = [super init]))
+    {
+        size_t width = size.width;
+        size_t height = size.height;
         
         GLubyte * spriteData = (GLubyte *) calloc(width*height*4, sizeof(GLubyte));
         
-        CGContextRef spriteContext = CGBitmapContextCreate(spriteData, width, height, 8, width*4, CGImageGetColorSpace(spriteImage), kCGImageAlphaPremultipliedLast);
+        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+        CGContextRef context = CGBitmapContextCreate(spriteData, width, height, 8, width*4, colorSpace, kCGImageAlphaPremultipliedLast);
+        CGColorSpaceRelease(colorSpace);
         
-        CGContextDrawImage(spriteContext, CGRectMake(0, 0, width, height), spriteImage);
-        
-        CGContextRelease(spriteContext);
+        UIGraphicsPushContext(context);
+        CGContextTranslateCTM(context, 0, height);
+        CGContextScaleCTM(context, 1.0f, -1.0f);
+        UIGraphicsPushContext(context);
+        if (drawingBlock) drawingBlock(context);
+        UIGraphicsPopContext();
         
         GLuint texName;
         glGenTextures(1, &texName);
@@ -94,12 +106,9 @@ static TTGLTextureService *instance = nil;
         free(spriteData);
         
         _glTexture = texName;
-        _size = CGSizeMake(width, height);
-    
+        _size = _size;
     }
-    
     return self;
-    
 }
 
 @end
