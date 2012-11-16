@@ -8,7 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+
+typedef void (^TTGLImageDrawingBlock)(CGContextRef context);
+
+
 @class TTGLTexture;
+
 
 @interface TTGLTextureService : NSObject
 
@@ -18,6 +23,7 @@
 
 @end
 
+
 @interface TTGLTexture : NSObject
 
 @property (assign, nonatomic) GLuint glTexture;
@@ -25,5 +31,6 @@
 @property (strong, nonatomic) NSString *fileName;
 
 - (id)initWithName:(NSString *)fileName;
+- (id)initWithSize:(CGSize)size drawingBlock:(TTGLImageDrawingBlock)drawingBlock;
 
 @end
