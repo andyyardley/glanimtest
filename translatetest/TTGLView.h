@@ -9,11 +9,23 @@
 #import <QuartzCore/QuartzCore.h>
 #import "TTGLGlobals.h"
 
+@class TTGLView;
+
+@protocol DuelDetailViewDelegate
+
+- (NSString *)detailView:(TTGLView *)detailView imageNameForPlayerAtIndex:(NSUInteger)index;
+- (NSString *)detailView:(TTGLView *)detailView nameForPlayerAtIndex:(NSUInteger)index;
+- (float)detailView:(TTGLView *)detailView scoreForPlayerAtIndex:(NSUInteger)index;
+
+@end
+
 @interface TTGLView : UIView
 
+@property (strong, nonatomic) id<DuelDetailViewDelegate> delegate;
 @property (strong, nonatomic) UILabel *fps;
 
-- (void)startAnimation;
-- (void)stopAnimation;
+- (void)start;
+- (void)update;
+- (void)stop;
 
 @end

@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TTGLView.h"
 
-@interface TTViewController : UIViewController
+@interface TTViewController : UIViewController <DuelDetailViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UIView *containerView;
 

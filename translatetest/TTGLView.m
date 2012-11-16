@@ -53,6 +53,12 @@
 
 @property (strong, nonatomic) CADisplayLink *displayLink;
 
+// Data
+
+@property (strong, nonatomic) NSMutableArray *playerNames;
+@property (strong, nonatomic) NSMutableArray *playerScores;
+@property (strong, nonatomic) NSMutableArray *playerImageNames;
+
 @end
 
 @implementation TTGLView
@@ -128,10 +134,6 @@
     _leftAvatarGrid = [[TTGLPatchGrid alloc] initWithShaderName:kSimpleTextureShader];
     _rightAvatarGrid = [[TTGLPatchGrid alloc] initWithShaderName:kSimpleTextureShader];
     
-    TTGLTexture *avatarTexture = [[TTGLTextureService sharedInstance] textureForName:@"avatar"];
-    _leftAvatarGrid.texture = avatarTexture;
-    _rightAvatarGrid.texture = avatarTexture;
-    
     [self setupGradientPatchGrid];
     [self setupTexturePatchGrid];
     
@@ -142,15 +144,30 @@
     
 }
 
-- (void)stopAnimation
+- (void)stop
 {
     [_displayLink invalidate];
 }
 
-- (void)startAnimation
+- (void)start
 {
+    
+    _playerNames = [NSMutableArray array];
+    _playerScores = [NSMutableArray array];
+    _playerImageNames = [NSMutableArray array];
+    
+    for (int i=0; i < 2; i++) {
+        [_playerNames addObject:[self.delegate detailView:self nameForPlayerAtIndex:i]];
+        [_playerScores addObject:[NSNumber numberWithFloat:[self.delegate detailView:self scoreForPlayerAtIndex:i]]];
+        [_playerImageNames addObject:[self.delegate detailView:self imageNameForPlayerAtIndex:i]];
+    }
+    
+    _leftAvatarGrid.texture = [[TTGLTextureService sharedInstance] textureForName:[_playerImageNames objectAtIndex:0]];   
+    _rightAvatarGrid.texture = [[TTGLTextureService sharedInstance] textureForName:[_playerImageNames objectAtIndex:1]];
+    
     _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(render:)];
     [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+    
 }
 
 - (void)dealloc

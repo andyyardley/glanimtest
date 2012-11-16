@@ -19,6 +19,8 @@
 		A13580C516562F9F00A39F11 /* BlurTextureFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A13580C316562F9F00A39F11 /* BlurTextureFragment.glsl */; };
 		A13580C616562F9F00A39F11 /* BlurTextureVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A13580C416562F9F00A39F11 /* BlurTextureVertex.glsl */; };
 		A13580CB1656406C00A39F11 /* TTGLMeshService.m in Sources */ = {isa = PBXBuildFile; fileRef = A13580CA1656406C00A39F11 /* TTGLMeshService.m */; };
+		A13580DA165688F900A39F11 /* avatar2.png in Resources */ = {isa = PBXBuildFile; fileRef = A13580D9165688F900A39F11 /* avatar2.png */; };
+		A13580DC1656892E00A39F11 /* redundantcode in Resources */ = {isa = PBXBuildFile; fileRef = A13580DB1656892E00A39F11 /* redundantcode */; };
 		A19DA6AB164D365B0087DD98 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A19DA6AA164D365B0087DD98 /* UIKit.framework */; };
 		A19DA6AD164D365B0087DD98 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A19DA6AC164D365B0087DD98 /* Foundation.framework */; };
 		A19DA6AF164D365B0087DD98 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A19DA6AE164D365B0087DD98 /* CoreGraphics.framework */; };
@@ -58,6 +60,8 @@
 		A13580C416562F9F00A39F11 /* BlurTextureVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = BlurTextureVertex.glsl; sourceTree = "<group>"; };
 		A13580C91656406C00A39F11 /* TTGLMeshService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGLMeshService.h; sourceTree = "<group>"; };
 		A13580CA1656406C00A39F11 /* TTGLMeshService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGLMeshService.m; sourceTree = "<group>"; };
+		A13580D9165688F900A39F11 /* avatar2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = avatar2.png; sourceTree = "<group>"; };
+		A13580DB1656892E00A39F11 /* redundantcode */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = redundantcode; sourceTree = "<group>"; };
 		A19DA6A6164D365B0087DD98 /* translatetest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = translatetest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A19DA6AA164D365B0087DD98 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A19DA6AC164D365B0087DD98 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -181,6 +185,7 @@
 				A10AB7B71650EF890071C923 /* TTGLTextureFrameBuffer.h */,
 				A10AB7B81650EF890071C923 /* TTGLTextureFrameBuffer.m */,
 				A1B97FCE1655108E00F2202A /* TTGLGlobals.h */,
+				A13580DB1656892E00A39F11 /* redundantcode */,
 			);
 			path = translatetest;
 			sourceTree = "<group>";
@@ -188,6 +193,7 @@
 		A19DA6B1164D365B0087DD98 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A13580D9165688F900A39F11 /* avatar2.png */,
 				A1B876181655B7AE00B4781A /* avatar.png */,
 				A19DA6B2164D365B0087DD98 /* translatetest-Info.plist */,
 				A19DA6B3164D365B0087DD98 /* InfoPlist.strings */,
@@ -268,6 +274,8 @@
 				A1B876191655B7AE00B4781A /* avatar.png in Resources */,
 				A13580C516562F9F00A39F11 /* BlurTextureFragment.glsl in Resources */,
 				A13580C616562F9F00A39F11 /* BlurTextureVertex.glsl in Resources */,
+				A13580DA165688F900A39F11 /* avatar2.png in Resources */,
+				A13580DC1656892E00A39F11 /* redundantcode in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
