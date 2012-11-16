@@ -7,10 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TTGLTextureService.h"
 
 @interface TTGLTextureFrameBuffer : NSObject
 
-@property (assign, nonatomic) GLuint texture;
+@property (strong, nonatomic) TTGLTexture   *texture;
+@property (assign, nonatomic) GLuint        textureLocation;
 
 - (id)initWithWidth:(GLfloat)width height:(GLfloat)height;
 - (void)begin;

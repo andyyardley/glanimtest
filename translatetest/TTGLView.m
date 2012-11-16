@@ -38,6 +38,7 @@
 
 @property (strong, nonatomic) TTGLPatchGrid *ledGrid;
 @property (strong, nonatomic) TTGLPatchGrid *textureGrid;
+@property (strong, nonatomic) TTGLPatchGrid *reflectionGrid;
 
 @property (strong, nonatomic) TTGLPatchGrid *leftAvatarGrid;
 @property (strong, nonatomic) TTGLPatchGrid *rightAvatarGrid;
@@ -46,6 +47,7 @@
 
 @property (strong, nonatomic) TTGLTextureFrameBuffer *textureFrameBuffer;
 @property (strong, nonatomic) TTGLTextureFrameBuffer *ledFrameBuffer;
+@property (strong, nonatomic) TTGLTextureFrameBuffer *reflectionFrameBuffer;
 
 @property (strong, nonatomic) CADisplayLink *displayLink;
 
@@ -115,7 +117,8 @@
     _rightColorGrid = [[TTGLPatchGrid alloc] initWithShaderName:kColorBlendShader];
 
     _ledGrid = [[TTGLPatchGrid alloc] initWithShaderName:kLedMatrixShader];
-    _textureGrid = [[TTGLPatchGrid alloc] initWithShaderName:kBlurTextureShader];
+    _textureGrid = [[TTGLPatchGrid alloc] initWithShaderName:kSimpleTextureShader];
+    _reflectionGrid = [[TTGLPatchGrid alloc] initWithShaderName:kBlurTextureShader];
     
     _leftAvatarGrid = [[TTGLPatchGrid alloc] initWithShaderName:kSimpleTextureShader];
     _rightAvatarGrid = [[TTGLPatchGrid alloc] initWithShaderName:kSimpleTextureShader];
@@ -127,8 +130,10 @@
     [self setupGradientPatchGrid];
     [self setupTexturePatchGrid];
     
+    _reflectionFrameBuffer = [[TTGLTextureFrameBuffer alloc] initWithWidth:self.frame.size.width / 4 height:(self.frame.size.height * 0.1) / 2];
     _textureFrameBuffer = [[TTGLTextureFrameBuffer alloc] initWithWidth:80 height:70];
-    _ledFrameBuffer = [[TTGLTextureFrameBuffer alloc] initWithWidth:self.frame.size.width*self.contentScaleFactor height:self.frame.size.height*self.contentScaleFactor];
+    _ledFrameBuffer = [[TTGLTextureFrameBuffer alloc] initWithWidth:self.frame.size.width * self.contentScaleFactor height:self.frame.size.height * self.contentScaleFactor];
+//    _textureFrameBuffer = [[TTGLTextureFrameBuffer alloc] initWithWidth:self.frame.size.width * self.contentScaleFactor height:self.frame.size.height * self.contentScaleFactor];
     
 }
 
@@ -191,13 +196,15 @@
     
     float _animPos = [self easeInOut:MAX(0.0f, MIN(1.0f, (_pos - 1.0f) / 2.0f))];
     
-//    glViewport(0, 0, _framebufferWidth, _framebufferHeight);
-//    glClearColor(0.0f, 0.0f/255.0f, 0.0f/255.0f, 1.0f);
-//    glClear(GL_COLOR_BUFFER_BIT);
+    glViewport(0, 0, _framebufferWidth, _framebufferHeight);
+    glClearColor(0.0f, 0.0f/255.0f, 0.0f/255.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    
+    
+    
     
     [_textureFrameBuffer begin];
-    glClearColor(0.0f, 0.0/255.0, 0.0/255.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT);
     
     _leftColorGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(-1.0f, MIN(0, -1.5f + ((MAX(0, _pos-1) / 4) * 1.5)), 0.0f), GLKMatrix4MakeScale(1.0f, 1.0f, 1.0f));
     [_leftColorGrid renderWithProjectionMatrix:_projectionMatrix];
@@ -225,17 +232,12 @@
     
     [_textureFrameBuffer end];
     
-    [_ledFrameBuffer begin];
-    glViewport(0, 0, _framebufferWidth, _framebufferHeight);
-    glClearColor(0.0f, 0.0f/255.0f, 0.0f/255.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
     
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+    
+    
+    [_ledFrameBuffer begin];
 
-    TTGLTexture *texture = [[TTGLTexture alloc] init];
-    texture.size = CGSizeMake(80.0f, 70.0f);
-    texture.glTexture = _textureFrameBuffer.texture;
+    TTGLTexture *texture = _textureFrameBuffer.texture;
     
     _ledGrid.texture = texture;
     
@@ -256,27 +258,31 @@
     //    _rightAvatarGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeScale(-1.0f, -1.0f, 1.0f), _rightAvatarGrid.position);
     _rightAvatarGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(-1.25f + _animPos, 0.3f, 0), _rightAvatarGrid.position);
     [_rightAvatarGrid renderWithProjectionMatrix:_projectionMatrix];
-    
+
     [_ledFrameBuffer end];
-    
-    glViewport(0, 0, _framebufferWidth, _framebufferHeight);
-    glClearColor(0.0f, 0.0f/255.0f, 0.0f/255.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-    
-    texture = [[TTGLTexture alloc] init];
-    texture.size = CGSizeMake(320.0f, 280.0f);
-    texture.glTexture = _ledFrameBuffer.texture;
+
+    texture = _ledFrameBuffer.texture;
     _textureGrid.texture = texture;
     
+    [_reflectionFrameBuffer begin];
     _textureGrid.position = GLKMatrix4Identity;
-    _textureGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeScale(1.0f, 0.9f, 1.0f), _ledGrid.position);
-    _textureGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(-0.0f, 0.1f, 0), _textureGrid.position);
+    _textureGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeScale(2.0f, 1.0f, 1.0f), _textureGrid.position);
+    _textureGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(-1.0f, 0.0f, 0), _textureGrid.position);
+    [_textureGrid renderWithProjectionMatrix:_projectionMatrix];
+    [_reflectionFrameBuffer end];
+    
+    _textureGrid.position = GLKMatrix4Identity;
+    _textureGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeScale(2.0f, 0.9f, 1.0f), _textureGrid.position);
+    _textureGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(-1.0f, 0.1f, 0), _textureGrid.position);
     [_textureGrid renderWithProjectionMatrix:_projectionMatrix];
     
-//    _textureGrid.position = GLKMatrix4MakeScale(1.0f/(320/4), 1.0f/(280/4), 0);
-    _textureGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeScale(1.0f, -0.1f, 1.0f), _ledGrid.position);
-    _textureGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(-0.0f, 0.1f, 0), _textureGrid.position);
-    [_textureGrid renderWithProjectionMatrix:_projectionMatrix];
+    texture = _reflectionFrameBuffer.texture;
+    _reflectionGrid.texture = texture;
+    
+    _reflectionGrid.position = GLKMatrix4Identity;
+    _reflectionGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeScale(2.0f, -0.1f, 1.0f), _reflectionGrid.position);
+    _reflectionGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(-1.0f, 0.1f, 0), _reflectionGrid.position);
+    [_reflectionGrid renderWithProjectionMatrix:_projectionMatrix];
     
     [_eaglContext presentRenderbuffer:GL_RENDERBUFFER];
     
@@ -476,9 +482,9 @@
         }
     }
     
-    [_textureGrid setVertices:_vertices count:width*height];
-    [_textureGrid setIndices:_indices count:(width-1)*(height-1)*6];
-    [_textureGrid setupVBOs];
+//    [_textureGrid setVertices:_vertices count:width*height];
+//    [_textureGrid setIndices:_indices count:(width-1)*(height-1)*6];
+//    [_textureGrid setupVBOs];
     
     [_ledGrid setVertices:_vertices count:width*height];
     [_ledGrid setIndices:_indices count:(width-1)*(height-1)*6];

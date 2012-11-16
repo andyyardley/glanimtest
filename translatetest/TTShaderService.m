@@ -219,14 +219,14 @@ static TTShaderService *instance = nil;
 - (void)logProgram:(GLuint)prog step:(NSString*)step
 {
 //#if defined(DEBUG)
-    GLint logLength;
-    glGetProgramiv(prog, GL_INFO_LOG_LENGTH, &logLength);
-    if (logLength > 0) {
-        GLchar *log = (GLchar *)malloc(logLength);
-        glGetProgramInfoLog(prog, logLength, &logLength, log);
-        NSLog(@"Program %@ log:\n%s", step, log);
-        free(log);
-    }
+//    GLint logLength;
+//    glGetProgramiv(prog, GL_INFO_LOG_LENGTH, &logLength);
+//    if (logLength > 0) {
+//        GLchar *log = (GLchar *)malloc(logLength);
+//        glGetProgramInfoLog(prog, logLength, &logLength, log);
+//        NSLog(@"Program %@ log:\n%s", step, log);
+//        free(log);
+//    }
 //#endif
 }
 

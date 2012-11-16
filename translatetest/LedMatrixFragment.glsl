@@ -39,6 +39,10 @@ void main()
     lowp float radiusSquared = powers.x * powers.x + powers.y * powers.y;
 //    gl_FragColor = (radiusSquared > ledRadiusSquared)? nilColor: texture2D(Texture, pixelTexCoords);
 //    gl_FragColor = (radiusSquared > ledRadiusSquared)? nilColor: texture2D(Texture, TexCoordOut);
-    gl_FragColor = step(radiusSquared, ledRadiusSquared) * texture2D(Texture, TexCoordOut);
+
+    highp vec4 color = (step(radiusSquared, ledRadiusSquared) * texture2D(Texture, TexCoordOut));
+    
+    gl_FragColor = color * ((0.75 - abs(TexCoordOut.x - 0.5)) * (0.75 - abs(TexCoordOut.y - 0.5)) * 3.0);
+
 //    gl_FragColor = texture2D(Texture, TexCoordOut);
 }

@@ -155,13 +155,13 @@ const GLushort __indices[] = {
 
     if (_texture) {
         glEnable(GL_BLEND);
-        glBlendFunc(GL_ONE, GL_SRC_COLOR);
+        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, _texture.glTexture);
         glUniform1i(_textureUniform, 0);
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR); // Linear Filtering
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR); // Linear Filtering
-        glEnable(GL_TEXTURE0);
+//        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR); // Linear Filtering
+//        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR); // Linear Filtering
+//        glEnable(GL_TEXTURE_2D);
         glUniform2f([shaderProgram uniformForName:@"TexSize"], _texture.size.width, _texture.size.height);
     }
     
