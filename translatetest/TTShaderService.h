@@ -20,7 +20,8 @@ static NSString *kTextureUniform        = @"Texture";
 static NSString *kColorBlendShader      = @"ColorBlendShader";
 static NSString *kSimpleTextureShader   = @"SimpleTextureShader";
 static NSString *kLedMatrixShader       = @"LedMatrixShader";
-static NSString *kSolidBlackShader       = @"SolidBlackShader";
+static NSString *kSolidBlackShader      = @"SolidBlackShader";
+static NSString *kBlurTextureShader     = @"BlurTextureShader";
 
 @interface TTShaderService : NSObject
 
@@ -30,10 +31,7 @@ static NSString *kSolidBlackShader       = @"SolidBlackShader";
 - (TTShaderProgram *)shaderForKey:(NSString *)key;
 - (TTShaderProgram *)activateShaderForKey:(NSString *)key;
 
-+ (TTShaderProgram *)createColorBlendShader;
-+ (TTShaderProgram *)createSolidBlackShader;
-+ (TTShaderProgram *)createSimpleTextureShader;
-+ (TTShaderProgram *)createLedMatrixShader;
+- (void)loadShader:(NSString *)fileName forKey:(NSString *)key;
 
 @end
 

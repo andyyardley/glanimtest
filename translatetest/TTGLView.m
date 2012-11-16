@@ -7,16 +7,16 @@
 //
 
 #import "TTGLView.h"
-#import "TTGLColorGrid.h"
+#import "TTGLPatchGrid.h"
 #import "TTShaderService.h"
 #import "TTGLTextureFrameBuffer.h"
-#import <vector>
+#import <GLKit/GLKit.h>
 
 #define GRID_COUNT 80
 
-struct ColorGridImpl {
-    std::vector<TTGLColorGrid*> list;
-};
+//struct ColorGridImpl {
+//    std::vector<TTGLPatchGrid*> list;
+//};
 
 @interface TTGLView ()
 {
@@ -33,14 +33,21 @@ struct ColorGridImpl {
 @property (assign, nonatomic) GLKMatrix4    projectionMatrix;
 @property (assign, nonatomic) GLKMatrix4    viewMatrix;
 
-@property (strong, nonatomic) TTGLColorGrid *leftColorGrid;
-@property (strong, nonatomic) TTGLColorGrid *rightColorGrid;
+@property (strong, nonatomic) TTGLPatchGrid *leftColorGrid;
+@property (strong, nonatomic) TTGLPatchGrid *rightColorGrid;
 
-@property (strong, nonatomic) TTGLColorGrid *textureGrid;
+@property (strong, nonatomic) TTGLPatchGrid *ledGrid;
+@property (strong, nonatomic) TTGLPatchGrid *textureGrid;
+
+@property (strong, nonatomic) TTGLPatchGrid *leftAvatarGrid;
+@property (strong, nonatomic) TTGLPatchGrid *rightAvatarGrid;
 
 @property (assign, nonatomic) GLuint        colorRenderBuffer;
 
 @property (strong, nonatomic) TTGLTextureFrameBuffer *textureFrameBuffer;
+@property (strong, nonatomic) TTGLTextureFrameBuffer *ledFrameBuffer;
+
+@property (strong, nonatomic) CADisplayLink *displayLink;
 
 @end
 
@@ -56,60 +63,89 @@ struct ColorGridImpl {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        
-        _dir = 0.01f;
-        
-        _eaglLayer = (CAEAGLLayer *)self.layer;
-        _eaglLayer.contentsScale = 2.0f;//[UIScreen mainScreen].scale;
-        
-        self.contentScaleFactor = 2.0f;//[UIScreen mainScreen].scale;
-        self.layer.contentsScale = [UIScreen mainScreen].scale;
-        
-        _eaglLayer.opaque = NO;
-        
-        _eaglContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-        [EAGLContext setCurrentContext:_eaglContext];
-        
-        [self setupRenderBuffer];
-        [self setupFrameBuffer];
-        
-        GLfloat size = frame.size.height / frame.size.width;
-        
-        _projectionMatrix = GLKMatrix4MakeOrtho(-1.0f, 1.0f, -0.0f, 1.0f, 0.01f, 1000.0f);
-//        _projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), size, 0.01f, 1000.0f);
-
-        _projectionMatrix = GLKMatrix4Multiply(_projectionMatrix, GLKMatrix4MakeLookAt(0, 0, 10, 0, 0, 0, 0, 1, 0));
-   
-        // Create and register shader
-        TTShaderProgram *colorBlendShader  = [TTShaderService createColorBlendShader];
-        [[TTShaderService sharedInstance] registerShader:colorBlendShader forKey:kColorBlendShader];
-        TTShaderProgram *simpleTextureShader  = [TTShaderService createSimpleTextureShader];
-        [[TTShaderService sharedInstance] registerShader:simpleTextureShader forKey:kSimpleTextureShader];
-        TTShaderProgram *ledMatrixShader  = [TTShaderService createLedMatrixShader];
-        [[TTShaderService sharedInstance] registerShader:ledMatrixShader forKey:kLedMatrixShader];
-        TTShaderProgram *solidBlackShader  = [TTShaderService createSolidBlackShader];
-        [[TTShaderService sharedInstance] registerShader:solidBlackShader forKey:kSolidBlackShader];
-        
-        _grids = [NSMutableArray array];
-        
-        for (int i=0; i<GRID_COUNT; i++) {
-            [_grids addObject:[[TTGLColorGrid alloc] initWithShaderName:kSolidBlackShader]];
-        }
-        
-        _leftColorGrid = [[TTGLColorGrid alloc] initWithShaderName:kColorBlendShader];
-        _rightColorGrid = [[TTGLColorGrid alloc] initWithShaderName:kColorBlendShader];
-
-        _textureGrid = [[TTGLColorGrid alloc] initWithShaderName:kLedMatrixShader];
-//        _textureGrid = [[TTGLColorGrid alloc] initWithShaderName:kSimpleTextureShader];
-        
-        _textureFrameBuffer = [[TTGLTextureFrameBuffer alloc] initWithWidth:80 height:80];
-        
-        CADisplayLink *mFrameLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(render:)];
-//        mFrameLink.frameInterval = 2;
-        [mFrameLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
-        
+        [self initialize];
     }
     return self;
+}
+
+- (void)awakeFromNib
+{
+    [self initialize];
+}
+
+- (void)initialize
+{
+    
+    _dir = 1.0/60.0f;
+    
+    _eaglLayer = (CAEAGLLayer *)self.layer;
+//    _eaglLayer.contentsScale = [UIScreen mainScreen].scale;
+    self.contentScaleFactor = [UIScreen mainScreen].scale;
+//    self.layer.contentsScale = [UIScreen mainScreen].scale;
+    
+    _eaglLayer.opaque = NO;
+    
+    _eaglContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+    [EAGLContext setCurrentContext:_eaglContext];
+    
+    [self setupRenderBuffer];
+    [self setupFrameBuffer];
+    
+//    GLfloat size = self.frame.size.height / self.frame.size.width;
+//    _projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), size, 0.01f, 1000.0f);
+    
+    _projectionMatrix = GLKMatrix4MakeOrtho(-1.0f, 1.0f, -0.0f, 1.0f, 0.01f, 1000.0f);
+    
+    _projectionMatrix = GLKMatrix4Multiply(_projectionMatrix, GLKMatrix4MakeLookAt(0, 0, 10, 0, 0, 0, 0, 1, 0));
+    
+    // Create and register shader
+    [[TTShaderService sharedInstance] loadShader:@"ColorBlend" forKey:kColorBlendShader];
+    [[TTShaderService sharedInstance] loadShader:@"LedMatrix" forKey:kLedMatrixShader];
+    [[TTShaderService sharedInstance] loadShader:@"SolidBlack" forKey:kSolidBlackShader];
+    [[TTShaderService sharedInstance] loadShader:@"SimpleTexture" forKey:kSimpleTextureShader];
+    [[TTShaderService sharedInstance] loadShader:@"BlurTexture" forKey:kBlurTextureShader];
+    
+    _grids = [NSMutableArray array];
+    
+    for (int i=0; i<GRID_COUNT; i++) {
+        [_grids addObject:[[TTGLPatchGrid alloc] initWithShaderName:kSolidBlackShader]];
+    }
+    
+    _leftColorGrid = [[TTGLPatchGrid alloc] initWithShaderName:kColorBlendShader];
+    _rightColorGrid = [[TTGLPatchGrid alloc] initWithShaderName:kColorBlendShader];
+
+    _ledGrid = [[TTGLPatchGrid alloc] initWithShaderName:kLedMatrixShader];
+    _textureGrid = [[TTGLPatchGrid alloc] initWithShaderName:kBlurTextureShader];
+    
+    _leftAvatarGrid = [[TTGLPatchGrid alloc] initWithShaderName:kSimpleTextureShader];
+    _rightAvatarGrid = [[TTGLPatchGrid alloc] initWithShaderName:kSimpleTextureShader];
+    
+    TTGLTexture *avatarTexture = [[TTGLTextureService sharedInstance] textureForName:@"avatar"];
+    _leftAvatarGrid.texture = avatarTexture;
+    _rightAvatarGrid.texture = avatarTexture;
+    
+    [self setupGradientPatchGrid];
+    [self setupTexturePatchGrid];
+    
+    _textureFrameBuffer = [[TTGLTextureFrameBuffer alloc] initWithWidth:80 height:70];
+    _ledFrameBuffer = [[TTGLTextureFrameBuffer alloc] initWithWidth:self.frame.size.width*self.contentScaleFactor height:self.frame.size.height*self.contentScaleFactor];
+    
+}
+
+- (void)stopAnimation
+{
+    [_displayLink invalidate];
+}
+
+- (void)startAnimation
+{
+    _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(render:)];
+    [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+}
+
+- (void)dealloc
+{
+    [_displayLink invalidate];
 }
 
 - (void)setupRenderBuffer
@@ -136,6 +172,11 @@ struct ColorGridImpl {
     
 }
 
+- (CGFloat)easeInOut:(CGFloat)time
+{
+    return (time < 0.5f)? 0.5f * powf(time * 2.0f, 3.0f): 0.5f * powf(time * 2.0f - 2.0f, 3.0f) + 1.0f;
+}
+
 - (void)render:(CADisplayLink*)displayLink
 {
     
@@ -145,41 +186,37 @@ struct ColorGridImpl {
     
     CGFloat fps = 1.0f / delta;
     _fps.text = [NSString stringWithFormat:@"%0.1f", fps];
-
-    if (_pos > 5) _dir = -0.01f;
-    if (_pos < -0) _dir = 0.01f;
     
     _pos += _dir * (delta / (1.0f/60.0f));
     
-    _pos = MAX(-0.01, MIN(5.01, _pos));
+    float _animPos = [self easeInOut:MAX(0.0f, MIN(1.0f, (_pos - 1.0f) / 2.0f))];
+    
+//    glViewport(0, 0, _framebufferWidth, _framebufferHeight);
+//    glClearColor(0.0f, 0.0f/255.0f, 0.0f/255.0f, 1.0f);
+//    glClear(GL_COLOR_BUFFER_BIT);
     
     [_textureFrameBuffer begin];
-    glClearColor(1.0f, 204.0/255.0, 55.0/255.0, 1.0);
+    glClearColor(0.0f, 0.0/255.0, 0.0/255.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
     
-    _leftColorGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(-1.0f, 0.0f, 0.0f), GLKMatrix4MakeScale(1.0f, 1.0f, 1.0f));
+    _leftColorGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(-1.0f, MIN(0, -1.5f + ((MAX(0, _pos-1) / 4) * 1.5)), 0.0f), GLKMatrix4MakeScale(1.0f, 1.0f, 1.0f));
     [_leftColorGrid renderWithProjectionMatrix:_projectionMatrix];
-    _rightColorGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(0.0f, 0.0f, 0.0f), GLKMatrix4MakeScale(1.0f, 1.0f, 1.0f));
+    _rightColorGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(0.0f, MAX(-3.0, -1.5f - ((MAX(0, _pos-1) / 4) * 1.5)), 0.0f), GLKMatrix4MakeScale(1.0f, 1.0f, 1.0f));
     [_rightColorGrid renderWithProjectionMatrix:_projectionMatrix];
     
     for (int i=0; i<GRID_COUNT; i++) {
         
-        TTGLColorGrid *grid = [_grids objectAtIndex:i];
+        TTGLPatchGrid *grid = [_grids objectAtIndex:i];
         
         CGFloat x = 0;
         
         if (i<(GRID_COUNT/2)) {
-            x = (((float)i)/GRID_COUNT) * 2;
+            x = ((float)i/GRID_COUNT) * 2;
         } else {
-            x = ((((float)i)/GRID_COUNT) * 2) - 1.0;
+            x = (((float)i/GRID_COUNT) * 2) - 1.0;
         }
         
-        CGFloat y1 = [self start:0.0f end:0.5f time:_pos-2.0f x:x];
-        CGFloat y2 = [self start:0.0f end:0.5f time:_pos-2.0f x:1.0 - x];
-        
-        CGFloat y = (y1+y2)/2;
-        y = 1.0f - y;
-        y = MAX(0.0f, y);
+        float y = [self amplitudeForOffset:x timeshift:_pos-1.0f];
         
         grid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(((1.0f / GRID_COUNT) * i * 2) - 1.0f, 1.0 - y, 0), GLKMatrix4MakeScale((1.0f / GRID_COUNT) * 2.0f, y, 1.0f));
         [grid renderWithProjectionMatrix:_projectionMatrix];
@@ -188,19 +225,86 @@ struct ColorGridImpl {
     
     [_textureFrameBuffer end];
     
+    [_ledFrameBuffer begin];
     glViewport(0, 0, _framebufferWidth, _framebufferHeight);
-    glClearColor(0.0f, 255.0f/255.0f, 0.0f/255.0f, 1.0f);
+    glClearColor(0.0f, 0.0f/255.0f, 0.0f/255.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     
-//    glEnable(GL_BLEND);
-//    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-    
-    _textureGrid.texture = _textureFrameBuffer.texture;
-    _textureGrid.position = GLKMatrix4MakeScale(2.0f, -1.0f, 2.0f);
-    _textureGrid.position = GLKMatrix4Translate(_textureGrid.position, -0.5f, -1.0f, 0);
-    [_textureGrid renderWithProjectionMatrix:_projectionMatrix];
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
+    TTGLTexture *texture = [[TTGLTexture alloc] init];
+    texture.size = CGSizeMake(80.0f, 70.0f);
+    texture.glTexture = _textureFrameBuffer.texture;
+    
+    _ledGrid.texture = texture;
+    
+    _ledGrid.position = GLKMatrix4MakeScale(1.0f/(320/4), 1.0f/(280/4), 0);
+    //    _textureGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeScale(2.0f, 0.9f, 1.0f), _textureGrid.position);
+    //    _textureGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(-1.0f, 0.1f, 0), _textureGrid.position);
+    _ledGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeScale(2.0f, 1.0f, 1.0f), _ledGrid.position);
+    _ledGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(-1.0f, 0.0f, 0), _ledGrid.position);
+    [_ledGrid renderWithProjectionMatrix:_projectionMatrix];
+    
+    _leftAvatarGrid.position = GLKMatrix4Identity;
+    _leftAvatarGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeScale(-0.5f, -0.25f, 1.0f), _leftAvatarGrid.position);
+    _leftAvatarGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(1.75f - _animPos, 0.3f, 0), _leftAvatarGrid.position);
+    [_leftAvatarGrid renderWithProjectionMatrix:_projectionMatrix];
+    
+    _rightAvatarGrid.position = GLKMatrix4Identity;
+    _rightAvatarGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeScale(-0.5f, -0.25f, 1.0f), _rightAvatarGrid.position);
+    //    _rightAvatarGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeScale(-1.0f, -1.0f, 1.0f), _rightAvatarGrid.position);
+    _rightAvatarGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(-1.25f + _animPos, 0.3f, 0), _rightAvatarGrid.position);
+    [_rightAvatarGrid renderWithProjectionMatrix:_projectionMatrix];
+    
+    [_ledFrameBuffer end];
+    
+    glViewport(0, 0, _framebufferWidth, _framebufferHeight);
+    glClearColor(0.0f, 0.0f/255.0f, 0.0f/255.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    texture = [[TTGLTexture alloc] init];
+    texture.size = CGSizeMake(320.0f, 280.0f);
+    texture.glTexture = _ledFrameBuffer.texture;
+    _textureGrid.texture = texture;
+    
+    _textureGrid.position = GLKMatrix4Identity;
+    _textureGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeScale(1.0f, 0.9f, 1.0f), _ledGrid.position);
+    _textureGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(-0.0f, 0.1f, 0), _textureGrid.position);
+    [_textureGrid renderWithProjectionMatrix:_projectionMatrix];
+    
+//    _textureGrid.position = GLKMatrix4MakeScale(1.0f/(320/4), 1.0f/(280/4), 0);
+    _textureGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeScale(1.0f, -0.1f, 1.0f), _ledGrid.position);
+    _textureGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(-0.0f, 0.1f, 0), _textureGrid.position);
+    [_textureGrid renderWithProjectionMatrix:_projectionMatrix];
+    
     [_eaglContext presentRenderbuffer:GL_RENDERBUFFER];
+    
+}
+
+- (CGFloat)amplitudeForOffset:(float)x timeshift:(NSTimeInterval)shift
+{
+    
+    CGFloat y1 = [self start:0.0f end:0.5f time:shift-0.0f x:x];
+    CGFloat y2 = [self start:0.0f end:0.5f time:shift-0.0f x:1.0 - x];
+    
+    CGFloat y = (y1+y2)/2;
+    y = 1.0f - y;
+    
+    CGFloat amplitude = y;
+    NSTimeInterval _noisePhase = shift * 5;
+    
+    float angle = 4.0 * M_PI * (x/2);
+    float scale = MAX(0.0f, amplitude - 1.0f * 0.5f);
+    amplitude += (sinf(angle * 4) + 1.0f) * (1.5f + scale);
+    amplitude += (sinf(angle + _noisePhase * 0.5f) + 1.0f) * (0.5f + scale);
+    amplitude += (sinf(angle * 15 + _noisePhase) + 1.0f) * (2.0f + scale);
+    
+    y += (amplitude / 50);
+    
+    y = MAX(0.0f, y);
+    
+    return y;
     
 }
 
@@ -227,6 +331,158 @@ struct ColorGridImpl {
     graph += start * (1.0 - damp);
     
     return graph;
+    
+}
+
+- (void)setupGradientPatchGrid
+{
+    
+    //    return;
+    
+    int width = 2;
+    int height = 5;
+    int nIndex = 0;
+    
+    Vertex3D *_vertices = (Vertex3D *)malloc(width * height * sizeof(Vertex3D));
+    GLushort *_indices = (GLushort *)malloc((width-1) * (height-1) * 6 * sizeof(GLushort));
+    
+    float red, green, blue;
+    
+    for (int y = 0; y < height; y++) {
+        
+        float red = 0.0f, green = 0.0f, blue = 0.0f;
+        if (y <= 1) {
+            red = 1.0f;
+        } else if (y >= 3) {
+            green = 1.0f;
+        } else {
+            green = 1.0f;
+            red = 1.0f;
+        }
+        
+        for (int x = 0; x < width; x++) {
+            _vertices[nIndex].position[0] = x; // X
+            _vertices[nIndex].position[1] = y; // Y
+            _vertices[nIndex].position[2] = 0; // Z
+            _vertices[nIndex].color[0] = red; // Red
+            _vertices[nIndex].color[1] = green; // Green
+            _vertices[nIndex].color[2] = 0.0f; // Blue
+            _vertices[nIndex].color[3] = 1.0f; // Alpha
+            _vertices[nIndex].texcoord[0] = (float)x / (width - 1); // U
+            _vertices[nIndex].texcoord[1] = (float)y / (height - 1); // V
+            nIndex ++;
+        }
+    }
+    
+    nIndex = 0;
+    
+    for (int y = 0; y < height-1; y++) {
+        for (int x = 0; x < width-1; x++) {
+            
+            _indices[nIndex] = (GLushort)(y * width) + x;
+            nIndex++;
+            _indices[nIndex] = (GLushort)(y * width) + x + 1;
+            nIndex++;
+            _indices[nIndex] = (GLushort)(y * width) + x + width;
+            nIndex++;
+            
+            //// 2ND FACE
+            
+            _indices[nIndex] = (GLushort)(y * width) + x + 1;
+            nIndex++;
+            _indices[nIndex] = (GLushort)(y * width) + x + width + 1;
+            nIndex++;
+            _indices[nIndex] = (GLushort)(y * width) + x + width;
+            nIndex++;
+            
+        }
+    }
+    
+    [_leftColorGrid setVertices:_vertices count:width*height];
+    [_leftColorGrid setIndices:_indices count:(width-1)*(height-1)*6];
+    [_leftColorGrid setupVBOs];
+    
+    [_rightColorGrid setVertices:_vertices count:width*height];
+    [_rightColorGrid setIndices:_indices count:(width-1)*(height-1)*6];
+    [_rightColorGrid setupVBOs];
+    
+}
+
+
+- (void)setupTexturePatchGrid
+{
+    
+    //    return;
+    
+    int width = 320/4;
+    int height = 280/4;
+    int nIndex = 0;
+    
+    width++;
+    height++;
+    
+    Vertex3D *_vertices = (Vertex3D *)malloc(width * height * sizeof(Vertex3D));
+    GLushort *_indices = (GLushort *)malloc((width-1) * (height-1) * 6 * sizeof(GLushort));
+    
+    float red, green, blue;
+    
+    for (int y = 0; y < height; y++) {
+        
+        float red = 0.0f, green = 0.0f, blue = 0.0f;
+        if (y <= 1) {
+            red = 1.0f;
+        } else if (y >= 3) {
+            green = 1.0f;
+        } else {
+            green = 1.0f;
+            red = 1.0f;
+        }
+        
+        for (int x = 0; x < width; x++) {
+            _vertices[nIndex].position[0] = x; // X
+            _vertices[nIndex].position[1] = y; // Y
+            _vertices[nIndex].position[2] = 0; // Z
+            _vertices[nIndex].color[0] = red; // Red
+            _vertices[nIndex].color[1] = green; // Green
+            _vertices[nIndex].color[2] = 0.0f; // Blue
+            _vertices[nIndex].color[3] = 1.0f; // Alpha
+            _vertices[nIndex].texcoord[0] = (float)x / (width - 1); // U
+            _vertices[nIndex].texcoord[1] = (float)y / (height - 1); // V
+            nIndex ++;
+        }
+    }
+    
+    nIndex = 0;
+    
+    for (int y = 0; y < height-1; y++) {
+        for (int x = 0; x < width-1; x++) {
+            
+            _indices[nIndex] = (GLushort)(y * width) + x;
+            nIndex++;
+            _indices[nIndex] = (GLushort)(y * width) + x + 1;
+            nIndex++;
+            _indices[nIndex] = (GLushort)(y * width) + x + width;
+            nIndex++;
+            
+            //// 2ND FACE
+            
+            _indices[nIndex] = (GLushort)(y * width) + x + 1;
+            nIndex++;
+            _indices[nIndex] = (GLushort)(y * width) + x + width + 1;
+            nIndex++;
+            _indices[nIndex] = (GLushort)(y * width) + x + width;
+            nIndex++;
+            
+        }
+    }
+    
+    [_textureGrid setVertices:_vertices count:width*height];
+    [_textureGrid setIndices:_indices count:(width-1)*(height-1)*6];
+    [_textureGrid setupVBOs];
+    
+    [_ledGrid setVertices:_vertices count:width*height];
+    [_ledGrid setIndices:_indices count:(width-1)*(height-1)*6];
+    [_ledGrid setupVBOs];
     
 }
 

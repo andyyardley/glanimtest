@@ -12,10 +12,13 @@
 		A10AB79A164FB5FB0071C923 /* TTGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = A10AB799164FB5FB0071C923 /* TTGLView.m */; };
 		A10AB7A2165027EE0071C923 /* ColorBlendVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A10AB7A1165027EE0071C923 /* ColorBlendVertex.glsl */; };
 		A10AB7A4165027FC0071C923 /* ColorBlendFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A10AB7A3165027FC0071C923 /* ColorBlendFragment.glsl */; };
-		A10AB7A7165028860071C923 /* TTGLColorGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = A10AB7A6165028860071C923 /* TTGLColorGrid.m */; };
+		A10AB7A7165028860071C923 /* TTGLPatchGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = A10AB7A6165028860071C923 /* TTGLPatchGrid.m */; };
 		A10AB7B21650E3990071C923 /* SimpleTextureVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A10AB7B11650E3990071C923 /* SimpleTextureVertex.glsl */; };
 		A10AB7B41650E3A40071C923 /* SimpleTextureFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A10AB7B31650E3A40071C923 /* SimpleTextureFragment.glsl */; };
 		A10AB7B91650EF8A0071C923 /* TTGLTextureFrameBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = A10AB7B81650EF890071C923 /* TTGLTextureFrameBuffer.m */; };
+		A13580C516562F9F00A39F11 /* BlurTextureFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A13580C316562F9F00A39F11 /* BlurTextureFragment.glsl */; };
+		A13580C616562F9F00A39F11 /* BlurTextureVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A13580C416562F9F00A39F11 /* BlurTextureVertex.glsl */; };
+		A13580CB1656406C00A39F11 /* TTGLMeshService.m in Sources */ = {isa = PBXBuildFile; fileRef = A13580CA1656406C00A39F11 /* TTGLMeshService.m */; };
 		A19DA6AB164D365B0087DD98 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A19DA6AA164D365B0087DD98 /* UIKit.framework */; };
 		A19DA6AD164D365B0087DD98 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A19DA6AC164D365B0087DD98 /* Foundation.framework */; };
 		A19DA6AF164D365B0087DD98 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A19DA6AE164D365B0087DD98 /* CoreGraphics.framework */; };
@@ -29,10 +32,12 @@
 		A19DA6C7164D365C0087DD98 /* TTViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A19DA6C5164D365C0087DD98 /* TTViewController.xib */; };
 		A19DA6CE164D36D10087DD98 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A19DA6CD164D36D10087DD98 /* QuartzCore.framework */; };
 		A19DA6D0164D36D70087DD98 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A19DA6CF164D36D70087DD98 /* GLKit.framework */; };
+		A1B876041655601B00B4781A /* TTGLTextureService.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B876031655601B00B4781A /* TTGLTextureService.m */; };
+		A1B876191655B7AE00B4781A /* avatar.png in Resources */ = {isa = PBXBuildFile; fileRef = A1B876181655B7AE00B4781A /* avatar.png */; };
 		A1B97FB51654DBB500F2202A /* SolidBlackVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A1B97FB41654DBB500F2202A /* SolidBlackVertex.glsl */; };
 		A1B97FB81654DBC500F2202A /* SolidBlackFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A1B97FB71654DBC400F2202A /* SolidBlackFragment.glsl */; };
-		A1E1403B16516ED000D009D2 /* ledMatrixFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A1E1403916516ED000D009D2 /* ledMatrixFragment.glsl */; };
-		A1E1403C16516ED000D009D2 /* ledMatrixVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A1E1403A16516ED000D009D2 /* ledMatrixVertex.glsl */; };
+		A1E1403B16516ED000D009D2 /* LedMatrixFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A1E1403916516ED000D009D2 /* LedMatrixFragment.glsl */; };
+		A1E1403C16516ED000D009D2 /* LedMatrixVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A1E1403A16516ED000D009D2 /* LedMatrixVertex.glsl */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,12 +48,16 @@
 		A10AB799164FB5FB0071C923 /* TTGLView.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = TTGLView.m; sourceTree = "<group>"; };
 		A10AB7A1165027EE0071C923 /* ColorBlendVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ColorBlendVertex.glsl; sourceTree = "<group>"; };
 		A10AB7A3165027FC0071C923 /* ColorBlendFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ColorBlendFragment.glsl; sourceTree = "<group>"; };
-		A10AB7A5165028860071C923 /* TTGLColorGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGLColorGrid.h; sourceTree = "<group>"; };
-		A10AB7A6165028860071C923 /* TTGLColorGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGLColorGrid.m; sourceTree = "<group>"; };
+		A10AB7A5165028860071C923 /* TTGLPatchGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGLPatchGrid.h; sourceTree = "<group>"; };
+		A10AB7A6165028860071C923 /* TTGLPatchGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGLPatchGrid.m; sourceTree = "<group>"; };
 		A10AB7B11650E3990071C923 /* SimpleTextureVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SimpleTextureVertex.glsl; sourceTree = "<group>"; };
 		A10AB7B31650E3A40071C923 /* SimpleTextureFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SimpleTextureFragment.glsl; sourceTree = "<group>"; };
 		A10AB7B71650EF890071C923 /* TTGLTextureFrameBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTGLTextureFrameBuffer.h; path = ../TTGLTextureFrameBuffer.h; sourceTree = "<group>"; };
 		A10AB7B81650EF890071C923 /* TTGLTextureFrameBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTGLTextureFrameBuffer.m; path = ../TTGLTextureFrameBuffer.m; sourceTree = "<group>"; };
+		A13580C316562F9F00A39F11 /* BlurTextureFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = BlurTextureFragment.glsl; sourceTree = "<group>"; };
+		A13580C416562F9F00A39F11 /* BlurTextureVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = BlurTextureVertex.glsl; sourceTree = "<group>"; };
+		A13580C91656406C00A39F11 /* TTGLMeshService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGLMeshService.h; sourceTree = "<group>"; };
+		A13580CA1656406C00A39F11 /* TTGLMeshService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGLMeshService.m; sourceTree = "<group>"; };
 		A19DA6A6164D365B0087DD98 /* translatetest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = translatetest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A19DA6AA164D365B0087DD98 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A19DA6AC164D365B0087DD98 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -67,10 +76,14 @@
 		A19DA6C6164D365C0087DD98 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/TTViewController.xib; sourceTree = "<group>"; };
 		A19DA6CD164D36D10087DD98 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A19DA6CF164D36D70087DD98 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		A1B876021655601B00B4781A /* TTGLTextureService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGLTextureService.h; sourceTree = "<group>"; };
+		A1B876031655601B00B4781A /* TTGLTextureService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGLTextureService.m; sourceTree = "<group>"; };
+		A1B876181655B7AE00B4781A /* avatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = avatar.png; sourceTree = "<group>"; };
 		A1B97FB41654DBB500F2202A /* SolidBlackVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SolidBlackVertex.glsl; sourceTree = "<group>"; };
 		A1B97FB71654DBC400F2202A /* SolidBlackFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SolidBlackFragment.glsl; sourceTree = "<group>"; };
-		A1E1403916516ED000D009D2 /* ledMatrixFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ledMatrixFragment.glsl; sourceTree = "<group>"; };
-		A1E1403A16516ED000D009D2 /* ledMatrixVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ledMatrixVertex.glsl; sourceTree = "<group>"; };
+		A1B97FCE1655108E00F2202A /* TTGLGlobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGLGlobals.h; sourceTree = "<group>"; };
+		A1E1403916516ED000D009D2 /* LedMatrixFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LedMatrixFragment.glsl; sourceTree = "<group>"; };
+		A1E1403A16516ED000D009D2 /* LedMatrixVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LedMatrixVertex.glsl; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,8 +106,10 @@
 		A10AB79F165022640071C923 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
-				A1E1403A16516ED000D009D2 /* ledMatrixVertex.glsl */,
-				A1E1403916516ED000D009D2 /* ledMatrixFragment.glsl */,
+				A13580C416562F9F00A39F11 /* BlurTextureVertex.glsl */,
+				A13580C316562F9F00A39F11 /* BlurTextureFragment.glsl */,
+				A1E1403A16516ED000D009D2 /* LedMatrixVertex.glsl */,
+				A1E1403916516ED000D009D2 /* LedMatrixFragment.glsl */,
 				A1B97FB41654DBB500F2202A /* SolidBlackVertex.glsl */,
 				A1B97FB71654DBC400F2202A /* SolidBlackFragment.glsl */,
 				A10AB7A1165027EE0071C923 /* ColorBlendVertex.glsl */,
@@ -103,6 +118,19 @@
 				A10AB7B31650E3A40071C923 /* SimpleTextureFragment.glsl */,
 			);
 			name = Shaders;
+			sourceTree = "<group>";
+		};
+		A13580C816563F3B00A39F11 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A10AB792164EB6C20071C923 /* TTShaderService.h */,
+				A10AB793164EB6C20071C923 /* TTShaderService.m */,
+				A1B876021655601B00B4781A /* TTGLTextureService.h */,
+				A1B876031655601B00B4781A /* TTGLTextureService.m */,
+				A13580C91656406C00A39F11 /* TTGLMeshService.h */,
+				A13580CA1656406C00A39F11 /* TTGLMeshService.m */,
+			);
+			name = Services;
 			sourceTree = "<group>";
 		};
 		A19DA69B164D365B0087DD98 = {
@@ -138,6 +166,7 @@
 		A19DA6B0164D365B0087DD98 /* translatetest */ = {
 			isa = PBXGroup;
 			children = (
+				A13580C816563F3B00A39F11 /* Services */,
 				A10AB79F165022640071C923 /* Shaders */,
 				A19DA6B9164D365B0087DD98 /* TTAppDelegate.h */,
 				A19DA6BA164D365B0087DD98 /* TTAppDelegate.m */,
@@ -145,14 +174,13 @@
 				A19DA6C3164D365C0087DD98 /* TTViewController.m */,
 				A19DA6C5164D365C0087DD98 /* TTViewController.xib */,
 				A19DA6B1164D365B0087DD98 /* Supporting Files */,
-				A10AB792164EB6C20071C923 /* TTShaderService.h */,
-				A10AB793164EB6C20071C923 /* TTShaderService.m */,
 				A10AB798164FB5FB0071C923 /* TTGLView.h */,
 				A10AB799164FB5FB0071C923 /* TTGLView.m */,
-				A10AB7A5165028860071C923 /* TTGLColorGrid.h */,
-				A10AB7A6165028860071C923 /* TTGLColorGrid.m */,
+				A10AB7A5165028860071C923 /* TTGLPatchGrid.h */,
+				A10AB7A6165028860071C923 /* TTGLPatchGrid.m */,
 				A10AB7B71650EF890071C923 /* TTGLTextureFrameBuffer.h */,
 				A10AB7B81650EF890071C923 /* TTGLTextureFrameBuffer.m */,
+				A1B97FCE1655108E00F2202A /* TTGLGlobals.h */,
 			);
 			path = translatetest;
 			sourceTree = "<group>";
@@ -160,6 +188,7 @@
 		A19DA6B1164D365B0087DD98 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A1B876181655B7AE00B4781A /* avatar.png */,
 				A19DA6B2164D365B0087DD98 /* translatetest-Info.plist */,
 				A19DA6B3164D365B0087DD98 /* InfoPlist.strings */,
 				A19DA6B6164D365B0087DD98 /* main.m */,
@@ -232,10 +261,13 @@
 				A10AB7A4165027FC0071C923 /* ColorBlendFragment.glsl in Resources */,
 				A10AB7B21650E3990071C923 /* SimpleTextureVertex.glsl in Resources */,
 				A10AB7B41650E3A40071C923 /* SimpleTextureFragment.glsl in Resources */,
-				A1E1403B16516ED000D009D2 /* ledMatrixFragment.glsl in Resources */,
-				A1E1403C16516ED000D009D2 /* ledMatrixVertex.glsl in Resources */,
+				A1E1403B16516ED000D009D2 /* LedMatrixFragment.glsl in Resources */,
+				A1E1403C16516ED000D009D2 /* LedMatrixVertex.glsl in Resources */,
 				A1B97FB51654DBB500F2202A /* SolidBlackVertex.glsl in Resources */,
 				A1B97FB81654DBC500F2202A /* SolidBlackFragment.glsl in Resources */,
+				A1B876191655B7AE00B4781A /* avatar.png in Resources */,
+				A13580C516562F9F00A39F11 /* BlurTextureFragment.glsl in Resources */,
+				A13580C616562F9F00A39F11 /* BlurTextureVertex.glsl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,8 +283,10 @@
 				A19DA6C4164D365C0087DD98 /* TTViewController.m in Sources */,
 				A10AB794164EB6C20071C923 /* TTShaderService.m in Sources */,
 				A10AB79A164FB5FB0071C923 /* TTGLView.m in Sources */,
-				A10AB7A7165028860071C923 /* TTGLColorGrid.m in Sources */,
+				A10AB7A7165028860071C923 /* TTGLPatchGrid.m in Sources */,
 				A10AB7B91650EF8A0071C923 /* TTGLTextureFrameBuffer.m in Sources */,
+				A1B876041655601B00B4781A /* TTGLTextureService.m in Sources */,
+				A13580CB1656406C00A39F11 /* TTGLMeshService.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

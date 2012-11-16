@@ -7,9 +7,13 @@
 //
 
 #import <QuartzCore/QuartzCore.h>
+#import "TTGLGlobals.h"
 
 @interface TTGLView : UIView
 
 @property (strong, nonatomic) UILabel *fps;
+
+- (void)startAnimation;
+- (void)stopAnimation;
 
 @end

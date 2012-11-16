@@ -7,10 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TTGLGlobals.h"
+#import "TTGLTextureService.h"
 
-@interface TTGLColorGrid : NSObject
+@interface TTGLPatchGrid : NSObject
 
-@property (assign, nonatomic) GLuint texture;
+@property (strong, nonatomic) TTGLTexture *texture;
+
 @property (strong, nonatomic) NSString *shaderName;
 @property (assign, nonatomic) GLKMatrix4 scale;
 @property (assign, nonatomic) GLKMatrix4 position;
@@ -19,5 +22,9 @@
 - (id)initWithShaderName:(NSString *)shaderName;
 
 - (void)renderWithProjectionMatrix:(GLKMatrix4)projectionMatrix;
+
+- (void)setVertices:(Vertex3D *)vertices count:(GLuint)count;
+- (void)setIndices:(GLushort *)indices count:(GLuint)count;
+- (void)setupVBOs;
 
 @end

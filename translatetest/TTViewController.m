@@ -49,12 +49,14 @@
 - (void)viewDidAppear:(BOOL)animated
 {
 
-    _glView = [[TTGLView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width)];
+    _glView = [[TTGLView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 280)];
     [self.view insertSubview:_glView belowSubview:_fps];
     
     _fps.textColor = [UIColor whiteColor];
     
     _glView.fps = _fps;
+    
+    [_glView startAnimation];
     
     return;
 

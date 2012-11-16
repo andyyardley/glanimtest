@@ -20,27 +20,31 @@ static TTShaderService *instance = nil;
 
 @implementation TTShaderService
 
-
 + (id)sharedInstance
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         instance = [[[self class] alloc] init];
-        [instance initalize];
+        [instance initialize];
     });
     
     return instance;
 }
 
-- (void)initalize
+- (void)initialize
 {
     _programs = [NSMutableDictionary dictionary];
+}
+
+- (void)loadShader:(NSString *)fileName forKey:(NSString *)key
+{
+    TTShaderProgram *shader = [[TTShaderProgram alloc] initWithVertexShaderFile:[NSString stringWithFormat:@"%@Vertex", fileName] fragmentShaderFile:[NSString stringWithFormat:@"%@Fragment", fileName]];
+    [self registerShader:shader forKey:key];
 }
 
 - (void)registerShader:(TTShaderProgram *)shader forKey:(NSString *)key
 {
     [_programs setObject:shader forKey:key];
-    NSLog(@"%@", _programs);
 }
 
 - (TTShaderProgram *)shaderForKey:(NSString *)key
@@ -61,30 +65,6 @@ static TTShaderService *instance = nil;
     return _activeProgram;
 }
 
-+ (TTShaderProgram *)createColorBlendShader
-{
-    TTShaderProgram *shader = [[TTShaderProgram alloc] initWithVertexShaderFile:@"ColorBlendVertex" fragmentShaderFile:@"ColorBlendFragment"];
-    return shader;
-}
-
-+ (TTShaderProgram *)createSimpleTextureShader
-{
-    TTShaderProgram *shader = [[TTShaderProgram alloc] initWithVertexShaderFile:@"SimpleTextureVertex" fragmentShaderFile:@"SimpleTextureFragment"];
-    return shader;
-}
-
-+ (TTShaderProgram *)createLedMatrixShader
-{
-    TTShaderProgram *shader = [[TTShaderProgram alloc] initWithVertexShaderFile:@"ledMatrixVertex" fragmentShaderFile:@"ledMatrixFragment"];
-    return shader;
-}
-
-+ (TTShaderProgram *)createSolidBlackShader
-{
-    TTShaderProgram *shader = [[TTShaderProgram alloc] initWithVertexShaderFile:@"SolidBlackVertex" fragmentShaderFile:@"SolidBlackFragment"];
-    return shader;
-}
-    
 @end
 
 @interface TTShaderProgram()
