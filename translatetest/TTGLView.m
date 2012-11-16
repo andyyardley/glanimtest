@@ -25,6 +25,8 @@
     GLfloat _dir;
     NSMutableArray *_grids;
     GLint _framebufferWidth, _framebufferHeight;
+    float _start;
+    float _end;
 }
 
 @property (strong, nonatomic) CAEAGLLayer   *eaglLayer;
@@ -79,6 +81,9 @@
 {
     
     _dir = 1.0/60.0f;
+    
+    _start = 0.0f;
+    _end = 0.5;
     
     _eaglLayer = (CAEAGLLayer *)self.layer;
 //    _eaglLayer.contentsScale = [UIScreen mainScreen].scale;
@@ -200,9 +205,11 @@
     glClearColor(0.0f, 0.0f/255.0f, 0.0f/255.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     
-    
-    
-    
+    if (_pos > 5) {
+        _pos = 0;
+        _start = _end;
+        _end = (float)(arc4random()%100) / 100.0f;
+    }
     
     [_textureFrameBuffer begin];
     
@@ -291,8 +298,8 @@
 - (CGFloat)amplitudeForOffset:(float)x timeshift:(NSTimeInterval)shift
 {
     
-    CGFloat y1 = [self start:0.0f end:0.5f time:shift-0.0f x:x];
-    CGFloat y2 = [self start:0.0f end:0.5f time:shift-0.0f x:1.0 - x];
+    CGFloat y1 = [self start:_start end:_end time:shift-0.0f x:x];
+    CGFloat y2 = [self start:_start end:_end time:shift-0.0f x:1.0 - x];
     
     CGFloat y = (y1+y2)/2;
     y = 1.0f - y;
