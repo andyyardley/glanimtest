@@ -7,6 +7,7 @@
 //
 
 #import "TTViewController.h"
+#import "TTDuelDetailView.h"
 
 #define kNumBars 80
 #define kBarWidth 320 / kNumBars
@@ -17,7 +18,7 @@
     float dir;
     float bars[kNumBars];
     UIView *views[kNumBars];
-    TTGLView *_glView;
+    TTDuelDetailView *_glView;
     CFTimeInterval _lastTimestamp;
     
     CALayer *_layer;
@@ -48,13 +49,13 @@
 - (void)viewDidAppear:(BOOL)animated
 {
 
-    _glView = [[TTGLView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 280)];
+    _glView = [[TTDuelDetailView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 280)];
     [self.view insertSubview:_glView belowSubview:_fps];
     _glView.delegate = self;
     
-    _fps.textColor = [UIColor whiteColor];
-    
-    _glView.fps = _fps;
+//    _fps.textColor = [UIColor whiteColor];
+//    
+//    _glView.fps = _fps;
     
     [_glView start];
 
@@ -72,7 +73,7 @@
 
 - (float)detailView:(TTGLView *)detailView scoreForPlayerAtIndex:(NSUInteger)index
 {
-    return arc4random()%5000;
+    return 2000;//arc4random()%5000;
 }
 
 @end

@@ -23,6 +23,7 @@
 		A13580DA165688F900A39F11 /* avatar2.png in Resources */ = {isa = PBXBuildFile; fileRef = A13580D9165688F900A39F11 /* avatar2.png */; };
 		A13580DC1656892E00A39F11 /* redundantcode in Resources */ = {isa = PBXBuildFile; fileRef = A13580DB1656892E00A39F11 /* redundantcode */; };
 		A13580DF16568A4D00A39F11 /* TTGLImage.m in Sources */ = {isa = PBXBuildFile; fileRef = A13580DE16568A4C00A39F11 /* TTGLImage.m */; };
+		A14F77551658EFF500FFDC0D /* TTDuelDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = A14F77541658EFF500FFDC0D /* TTDuelDetailView.m */; };
 		A19DA6AB164D365B0087DD98 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A19DA6AA164D365B0087DD98 /* UIKit.framework */; };
 		A19DA6AD164D365B0087DD98 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A19DA6AC164D365B0087DD98 /* Foundation.framework */; };
 		A19DA6AF164D365B0087DD98 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A19DA6AE164D365B0087DD98 /* CoreGraphics.framework */; };
@@ -40,8 +41,8 @@
 		A1B876191655B7AE00B4781A /* avatar.png in Resources */ = {isa = PBXBuildFile; fileRef = A1B876181655B7AE00B4781A /* avatar.png */; };
 		A1B97FB51654DBB500F2202A /* SolidBlackVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A1B97FB41654DBB500F2202A /* SolidBlackVertex.glsl */; };
 		A1B97FB81654DBC500F2202A /* SolidBlackFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A1B97FB71654DBC400F2202A /* SolidBlackFragment.glsl */; };
-		A1E1403B16516ED000D009D2 /* LedMatrixFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A1E1403916516ED000D009D2 /* LedMatrixFragment.glsl */; };
-		A1E1403C16516ED000D009D2 /* LedMatrixVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A1E1403A16516ED000D009D2 /* LedMatrixVertex.glsl */; };
+		A1E1403B16516ED000D009D2 /* ledMatrixFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A1E1403916516ED000D009D2 /* ledMatrixFragment.glsl */; };
+		A1E1403C16516ED000D009D2 /* ledMatrixVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A1E1403A16516ED000D009D2 /* ledMatrixVertex.glsl */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +69,8 @@
 		A13580DB1656892E00A39F11 /* redundantcode */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = redundantcode; sourceTree = "<group>"; };
 		A13580DD16568A4C00A39F11 /* TTGLImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGLImage.h; sourceTree = "<group>"; };
 		A13580DE16568A4C00A39F11 /* TTGLImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGLImage.m; sourceTree = "<group>"; };
+		A14F77531658EFF500FFDC0D /* TTDuelDetailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTDuelDetailView.h; sourceTree = "<group>"; };
+		A14F77541658EFF500FFDC0D /* TTDuelDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTDuelDetailView.m; sourceTree = "<group>"; };
 		A19DA6A6164D365B0087DD98 /* translatetest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = translatetest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A19DA6AA164D365B0087DD98 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A19DA6AC164D365B0087DD98 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -92,8 +95,8 @@
 		A1B97FB41654DBB500F2202A /* SolidBlackVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SolidBlackVertex.glsl; sourceTree = "<group>"; };
 		A1B97FB71654DBC400F2202A /* SolidBlackFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SolidBlackFragment.glsl; sourceTree = "<group>"; };
 		A1B97FCE1655108E00F2202A /* TTGLGlobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGLGlobals.h; sourceTree = "<group>"; };
-		A1E1403916516ED000D009D2 /* LedMatrixFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LedMatrixFragment.glsl; sourceTree = "<group>"; };
-		A1E1403A16516ED000D009D2 /* LedMatrixVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LedMatrixVertex.glsl; sourceTree = "<group>"; };
+		A1E1403916516ED000D009D2 /* ledMatrixFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ledMatrixFragment.glsl; sourceTree = "<group>"; };
+		A1E1403A16516ED000D009D2 /* ledMatrixVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ledMatrixVertex.glsl; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,8 +121,8 @@
 			children = (
 				A13580C416562F9F00A39F11 /* BlurTextureVertex.glsl */,
 				A13580C316562F9F00A39F11 /* BlurTextureFragment.glsl */,
-				A1E1403A16516ED000D009D2 /* LedMatrixVertex.glsl */,
-				A1E1403916516ED000D009D2 /* LedMatrixFragment.glsl */,
+				A1E1403A16516ED000D009D2 /* ledMatrixVertex.glsl */,
+				A1E1403916516ED000D009D2 /* ledMatrixFragment.glsl */,
 				A1B97FB41654DBB500F2202A /* SolidBlackVertex.glsl */,
 				A1B97FB71654DBC400F2202A /* SolidBlackFragment.glsl */,
 				A10AB7A1165027EE0071C923 /* ColorBlendVertex.glsl */,
@@ -196,6 +199,8 @@
 				A13580DE16568A4C00A39F11 /* TTGLImage.m */,
 				01DC1CCE1656988B00160EF4 /* TTGLLabel.h */,
 				01DC1CCF1656988B00160EF4 /* TTGLLabel.m */,
+				A14F77531658EFF500FFDC0D /* TTDuelDetailView.h */,
+				A14F77541658EFF500FFDC0D /* TTDuelDetailView.m */,
 			);
 			path = translatetest;
 			sourceTree = "<group>";
@@ -277,8 +282,8 @@
 				A10AB7A4165027FC0071C923 /* ColorBlendFragment.glsl in Resources */,
 				A10AB7B21650E3990071C923 /* SimpleTextureVertex.glsl in Resources */,
 				A10AB7B41650E3A40071C923 /* SimpleTextureFragment.glsl in Resources */,
-				A1E1403B16516ED000D009D2 /* LedMatrixFragment.glsl in Resources */,
-				A1E1403C16516ED000D009D2 /* LedMatrixVertex.glsl in Resources */,
+				A1E1403B16516ED000D009D2 /* ledMatrixFragment.glsl in Resources */,
+				A1E1403C16516ED000D009D2 /* ledMatrixVertex.glsl in Resources */,
 				A1B97FB51654DBB500F2202A /* SolidBlackVertex.glsl in Resources */,
 				A1B97FB81654DBC500F2202A /* SolidBlackFragment.glsl in Resources */,
 				A1B876191655B7AE00B4781A /* avatar.png in Resources */,
@@ -307,6 +312,7 @@
 				A13580CB1656406C00A39F11 /* TTGLMeshService.m in Sources */,
 				A13580DF16568A4D00A39F11 /* TTGLImage.m in Sources */,
 				01DC1CD01656988B00160EF4 /* TTGLLabel.m in Sources */,
+				A14F77551658EFF500FFDC0D /* TTDuelDetailView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

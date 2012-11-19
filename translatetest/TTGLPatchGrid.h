@@ -9,22 +9,25 @@
 #import <Foundation/Foundation.h>
 #import "TTGLGlobals.h"
 #import "TTGLTextureService.h"
+#import "TTGLMeshService.h"
 
 @interface TTGLPatchGrid : NSObject
 
-@property (strong, nonatomic) TTGLTexture *texture;
+@property (strong, nonatomic) TTGLTexture   *texture;
+@property (strong, nonatomic) TTGLMesh      *mesh;
 
 @property (strong, nonatomic) NSString *shaderName;
 @property (assign, nonatomic) GLKMatrix4 scale;
 @property (assign, nonatomic) GLKMatrix4 position;
 @property (assign, nonatomic) GLKMatrix4 rotation;
+@property (assign, nonatomic) float         alpha;
 
 - (id)initWithShaderName:(NSString *)shaderName;
 
 - (void)renderWithProjectionMatrix:(GLKMatrix4)projectionMatrix;
 
-- (void)setVertices:(Vertex3D *)vertices count:(GLuint)count;
-- (void)setIndices:(GLushort *)indices count:(GLuint)count;
-- (void)setupVBOs;
+//- (void)setVertices:(Vertex3D *)vertices count:(GLuint)count;
+//- (void)setIndices:(GLushort *)indices count:(GLuint)count;
+//- (void)setupVBOs;
 
 @end

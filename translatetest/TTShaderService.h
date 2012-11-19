@@ -16,6 +16,7 @@ static NSString *kViewUniform           = @"ModelView";
 static NSString *kProjectionUniform     = @"ProjectionView";
 static NSString *kTextureCoordAttribute = @"TexCoordIn";
 static NSString *kTextureUniform        = @"Texture";
+static NSString *kAlphaUniform          = @"Alpha";
 
 static NSString *kColorBlendShader      = @"ColorBlendShader";
 static NSString *kSimpleTextureShader   = @"SimpleTextureShader";

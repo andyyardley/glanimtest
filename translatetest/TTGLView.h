@@ -6,6 +6,14 @@
 //  Copyright (c) 2012 Venalicium Ltd. All rights reserved.
 //
 
+//
+//  TTGLLayer.h
+//  translatetest
+//
+//  Created by Andy on 11/11/2012.
+//  Copyright (c) 2012 Venalicium Ltd. All rights reserved.
+//
+
 #import <QuartzCore/QuartzCore.h>
 #import "TTGLGlobals.h"
 
@@ -21,11 +29,20 @@
 
 @interface TTGLView : UIView
 
+@property (strong, nonatomic) CAEAGLLayer   *eaglLayer;
+@property (strong, nonatomic) EAGLContext   *eaglContext;
+@property (assign, nonatomic) GLuint        colorRenderBuffer;
+
 @property (strong, nonatomic) id<DuelDetailViewDelegate> delegate;
-@property (strong, nonatomic) UILabel *fps;
+
+@property (assign, nonatomic) GLKMatrix4    projectionMatrix;
 
 - (void)start;
 - (void)update;
 - (void)stop;
+
+- (void)setupFrameBuffer;
+- (void)initialize;
+- (void)render:(GLfloat)currentFrame;
 
 @end

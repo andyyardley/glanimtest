@@ -38,14 +38,16 @@
 
 - (TTGLTexture *)texture
 {
-    if (super.texture)
+    if (!super.texture)
     {
         CGSize size = _size;
         if (CGSizeEqualToSize(size, CGSizeZero))
         {
             size = [_text sizeWithFont:_font];
+//            size.width = powf(2.0f, ceilf(log2f(size.width)));
+//            size.height = powf(2.0f, ceilf(log2f(size.height)));
         }
-        self.texture = [[TTGLTexture alloc] initWithSize:size drawingBlock:^(CGContextRef context) {
+        super.texture = [[TTGLTexture alloc] initWithSize:size drawingBlock:^(CGContextRef context) {
             
             [_color ?: [UIColor blackColor] setFill];
             [_text drawInRect:CGRectMake(0.0f, 0.0f, size.width, size.height) withFont:_font];

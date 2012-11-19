@@ -70,7 +70,6 @@ static TTGLTextureService *instance = nil;
     }
     
     return [self initWithSize:image.size drawingBlock:^(CGContextRef context) {
-        
         [image drawInRect:CGRectMake(0.0f, 0.0f, image.size.width, image.size.height)];
     }];
 }
@@ -79,8 +78,9 @@ static TTGLTextureService *instance = nil;
 {
     if ((self = [super init]))
     {
-        size_t width = size.width;
-        size_t height = size.height;
+
+        float width = powf(2.0f, ceilf(log2f((float)size.width)));
+        float height = powf(2.0f, ceilf(log2f((float)size.height)));
         
         GLubyte * spriteData = (GLubyte *) calloc(width*height*4, sizeof(GLubyte));
         
@@ -89,8 +89,9 @@ static TTGLTextureService *instance = nil;
         CGColorSpaceRelease(colorSpace);
         
         UIGraphicsPushContext(context);
-        CGContextTranslateCTM(context, 0, height);
-        CGContextScaleCTM(context, 1.0f, -1.0f);
+//        CGContextTranslateCTM(context, 0, height);
+
+        CGContextScaleCTM(context, width/size.width, height/size.height);
         UIGraphicsPushContext(context);
         if (drawingBlock) drawingBlock(context);
         UIGraphicsPopContext();
@@ -106,7 +107,8 @@ static TTGLTextureService *instance = nil;
         free(spriteData);
         
         _glTexture = texName;
-        _size = _size;
+        
+        _size = CGSizeMake(width, height);
     }
     return self;
 }

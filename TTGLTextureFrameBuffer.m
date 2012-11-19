@@ -65,6 +65,7 @@
         GLuint status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
         if (status != GL_FRAMEBUFFER_COMPLETE) {
             NSLog(@"ERROR: %x", status);
+            exit(0);
         }
         
         glBindTexture(GL_TEXTURE_2D, 0);
