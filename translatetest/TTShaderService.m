@@ -38,8 +38,10 @@ static TTShaderService *instance = nil;
 
 - (void)loadShader:(NSString *)fileName forKey:(NSString *)key
 {
+    NSDate *startTime = [NSDate date];
     TTShaderProgram *shader = [[TTShaderProgram alloc] initWithVertexShaderFile:[NSString stringWithFormat:@"%@Vertex", fileName] fragmentShaderFile:[NSString stringWithFormat:@"%@Fragment", fileName]];
     [self registerShader:shader forKey:key];
+    NSLog(@"%@ Compile Time %f", key, [[NSDate date] timeIntervalSinceDate:startTime]);
 }
 
 - (void)registerShader:(TTShaderProgram *)shader forKey:(NSString *)key

@@ -18,7 +18,7 @@
     TTGLLabel *label = [[TTGLLabel alloc] initWithShaderName:kSimpleTextureShader];
     label.font = font;
     label.text = text;
-    
+    label.size = [label.text sizeWithFont:label.font];
     return label;
 }
 
@@ -43,14 +43,14 @@
         CGSize size = _size;
         if (CGSizeEqualToSize(size, CGSizeZero))
         {
-            size = [_text sizeWithFont:_font];
+            _size = [_text sizeWithFont:_font];
 //            size.width = powf(2.0f, ceilf(log2f(size.width)));
 //            size.height = powf(2.0f, ceilf(log2f(size.height)));
         }
         super.texture = [[TTGLTexture alloc] initWithSize:size drawingBlock:^(CGContextRef context) {
             
-            [_color ?: [UIColor blackColor] setFill];
-            [_text drawInRect:CGRectMake(0.0f, 0.0f, size.width, size.height) withFont:_font];
+            [_textColor ?: [UIColor blackColor] setFill];
+            [_text drawInRect:CGRectMake(0.0f, 0.0f, _size.width, _size.height) withFont:_font];
         }];
     }
     return super.texture;
@@ -59,12 +59,14 @@
 - (void)setText:(NSString *)text
 {
     _text = text;
+    _size = [_text sizeWithFont:_font];
     [self setNeedsUpdate];
 }
 
 - (void)setFont:(UIFont *)font
 {
     _font = font;
+    _size = [_text sizeWithFont:_font];
     [self setNeedsUpdate];
 }
 

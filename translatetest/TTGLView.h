@@ -43,6 +43,6 @@
 
 - (void)setupFrameBuffer;
 - (void)initialize;
-- (void)render:(GLfloat)currentFrame;
+- (void)render:(GLfloat)delta;
 
 @end

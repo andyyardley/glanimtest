@@ -17,5 +17,6 @@
 - (id)initWithWidth:(GLfloat)width height:(GLfloat)height;
 - (void)begin;
 - (void)end;
+- (void)createNew;
 
 @end

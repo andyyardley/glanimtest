@@ -40,6 +40,7 @@
 @property (assign, nonatomic) GLuint texCoordSlot;
 @property (assign, nonatomic) GLuint textureUniform;
 @property (assign, nonatomic) GLuint alphaUniform;
+@property (assign, nonatomic) GLuint solidColorUniform;
 
 @property (assign, nonatomic) GLKMatrix4 viewMatrix;
 
@@ -122,6 +123,7 @@
     _projectionUniform = [shaderProgram uniformForName:kProjectionUniform];
     _textureUniform = [shaderProgram uniformForName:kTextureUniform];
     _alphaUniform = [shaderProgram uniformForName:kAlphaUniform];
+    _solidColorUniform = [shaderProgram uniformForName:kSolidColorUniform];
     
     _positionSlot = [shaderProgram attributeForName:kPositionAttribute];
     _colorSlot = [shaderProgram attributeForName:kColorAttribute];
@@ -155,6 +157,7 @@
     glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), (GLvoid*) (sizeof(GLfloat) * 3));
     glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), (GLvoid*) (sizeof(GLfloat) * 7));
     
+    glUniform4fv(_solidColorUniform, 1, _color.v);
     glUniformMatrix4fv(_viewUniform, 1, GL_FALSE, _viewMatrix.m);
     glUniformMatrix4fv(_projectionUniform, 1, GL_FALSE, projectionMatrix.m);
     glUniform1f(_alphaUniform, _alpha);
@@ -166,8 +169,8 @@
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, self.texture.glTexture);
         glUniform1i(_textureUniform, 0);
-//        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR); // Linear Filtering
-//        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR); // Linear Filtering
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // Linear Filtering
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // Linear Filtering
 //        glEnable(GL_TEXTURE_2D);
         glUniform2f([shaderProgram uniformForName:@"TexSize"], self.texture.size.width, self.texture.size.height);
     }

@@ -17,8 +17,8 @@
 		A10AB7B21650E3990071C923 /* SimpleTextureVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A10AB7B11650E3990071C923 /* SimpleTextureVertex.glsl */; };
 		A10AB7B41650E3A40071C923 /* SimpleTextureFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A10AB7B31650E3A40071C923 /* SimpleTextureFragment.glsl */; };
 		A10AB7B91650EF8A0071C923 /* TTGLTextureFrameBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = A10AB7B81650EF890071C923 /* TTGLTextureFrameBuffer.m */; };
-		A13580C516562F9F00A39F11 /* BlurTextureFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A13580C316562F9F00A39F11 /* BlurTextureFragment.glsl */; };
-		A13580C616562F9F00A39F11 /* BlurTextureVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A13580C416562F9F00A39F11 /* BlurTextureVertex.glsl */; };
+		A13580C516562F9F00A39F11 /* HorizBlurTextureFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A13580C316562F9F00A39F11 /* HorizBlurTextureFragment.glsl */; };
+		A13580C616562F9F00A39F11 /* HorizBlurTextureVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A13580C416562F9F00A39F11 /* HorizBlurTextureVertex.glsl */; };
 		A13580CB1656406C00A39F11 /* TTGLMeshService.m in Sources */ = {isa = PBXBuildFile; fileRef = A13580CA1656406C00A39F11 /* TTGLMeshService.m */; };
 		A13580DA165688F900A39F11 /* avatar2.png in Resources */ = {isa = PBXBuildFile; fileRef = A13580D9165688F900A39F11 /* avatar2.png */; };
 		A13580DC1656892E00A39F11 /* redundantcode in Resources */ = {isa = PBXBuildFile; fileRef = A13580DB1656892E00A39F11 /* redundantcode */; };
@@ -39,10 +39,15 @@
 		A19DA6D0164D36D70087DD98 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A19DA6CF164D36D70087DD98 /* GLKit.framework */; };
 		A1B876041655601B00B4781A /* TTGLTextureService.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B876031655601B00B4781A /* TTGLTextureService.m */; };
 		A1B876191655B7AE00B4781A /* avatar.png in Resources */ = {isa = PBXBuildFile; fileRef = A1B876181655B7AE00B4781A /* avatar.png */; };
-		A1B97FB51654DBB500F2202A /* SolidBlackVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A1B97FB41654DBB500F2202A /* SolidBlackVertex.glsl */; };
-		A1B97FB81654DBC500F2202A /* SolidBlackFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A1B97FB71654DBC400F2202A /* SolidBlackFragment.glsl */; };
+		A1B97FB51654DBB500F2202A /* SolidColorVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A1B97FB41654DBB500F2202A /* SolidColorVertex.glsl */; };
+		A1B97FB81654DBC500F2202A /* SolidColorFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A1B97FB71654DBC400F2202A /* SolidColorFragment.glsl */; };
 		A1E1403B16516ED000D009D2 /* ledMatrixFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A1E1403916516ED000D009D2 /* ledMatrixFragment.glsl */; };
 		A1E1403C16516ED000D009D2 /* ledMatrixVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A1E1403A16516ED000D009D2 /* ledMatrixVertex.glsl */; };
+		A1E4C32A165A52D2000C8EF0 /* TTGLGlobals.m in Sources */ = {isa = PBXBuildFile; fileRef = A1E4C329165A52D2000C8EF0 /* TTGLGlobals.m */; };
+		A1E4C33A165A9040000C8EF0 /* VertBlurTextureFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A1E4C338165A9040000C8EF0 /* VertBlurTextureFragment.glsl */; };
+		A1E4C33B165A9040000C8EF0 /* VertBlurTextureVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A1E4C339165A9040000C8EF0 /* VertBlurTextureVertex.glsl */; };
+		A1E4C33D165A92D0000C8EF0 /* ReflectionTextureVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A1E4C33C165A92D0000C8EF0 /* ReflectionTextureVertex.glsl */; };
+		A1E4C33F165A92DA000C8EF0 /* ReflectionTextureFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A1E4C33E165A92DA000C8EF0 /* ReflectionTextureFragment.glsl */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,7 +57,7 @@
 		A10AB793164EB6C20071C923 /* TTShaderService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTShaderService.m; sourceTree = "<group>"; };
 		A10AB796164EC0CD0071C923 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		A10AB798164FB5FB0071C923 /* TTGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGLView.h; sourceTree = "<group>"; };
-		A10AB799164FB5FB0071C923 /* TTGLView.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = TTGLView.m; sourceTree = "<group>"; };
+		A10AB799164FB5FB0071C923 /* TTGLView.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; fileEncoding = 4; path = TTGLView.m; sourceTree = "<group>"; };
 		A10AB7A1165027EE0071C923 /* ColorBlendVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ColorBlendVertex.glsl; sourceTree = "<group>"; };
 		A10AB7A3165027FC0071C923 /* ColorBlendFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ColorBlendFragment.glsl; sourceTree = "<group>"; };
 		A10AB7A5165028860071C923 /* TTGLPatchGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGLPatchGrid.h; sourceTree = "<group>"; };
@@ -61,8 +66,8 @@
 		A10AB7B31650E3A40071C923 /* SimpleTextureFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SimpleTextureFragment.glsl; sourceTree = "<group>"; };
 		A10AB7B71650EF890071C923 /* TTGLTextureFrameBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTGLTextureFrameBuffer.h; path = ../TTGLTextureFrameBuffer.h; sourceTree = "<group>"; };
 		A10AB7B81650EF890071C923 /* TTGLTextureFrameBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTGLTextureFrameBuffer.m; path = ../TTGLTextureFrameBuffer.m; sourceTree = "<group>"; };
-		A13580C316562F9F00A39F11 /* BlurTextureFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = BlurTextureFragment.glsl; sourceTree = "<group>"; };
-		A13580C416562F9F00A39F11 /* BlurTextureVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = BlurTextureVertex.glsl; sourceTree = "<group>"; };
+		A13580C316562F9F00A39F11 /* HorizBlurTextureFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HorizBlurTextureFragment.glsl; sourceTree = "<group>"; };
+		A13580C416562F9F00A39F11 /* HorizBlurTextureVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HorizBlurTextureVertex.glsl; sourceTree = "<group>"; };
 		A13580C91656406C00A39F11 /* TTGLMeshService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGLMeshService.h; sourceTree = "<group>"; };
 		A13580CA1656406C00A39F11 /* TTGLMeshService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGLMeshService.m; sourceTree = "<group>"; };
 		A13580D9165688F900A39F11 /* avatar2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = avatar2.png; sourceTree = "<group>"; };
@@ -92,11 +97,16 @@
 		A1B876021655601B00B4781A /* TTGLTextureService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGLTextureService.h; sourceTree = "<group>"; };
 		A1B876031655601B00B4781A /* TTGLTextureService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGLTextureService.m; sourceTree = "<group>"; };
 		A1B876181655B7AE00B4781A /* avatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = avatar.png; sourceTree = "<group>"; };
-		A1B97FB41654DBB500F2202A /* SolidBlackVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SolidBlackVertex.glsl; sourceTree = "<group>"; };
-		A1B97FB71654DBC400F2202A /* SolidBlackFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SolidBlackFragment.glsl; sourceTree = "<group>"; };
+		A1B97FB41654DBB500F2202A /* SolidColorVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SolidColorVertex.glsl; sourceTree = "<group>"; };
+		A1B97FB71654DBC400F2202A /* SolidColorFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SolidColorFragment.glsl; sourceTree = "<group>"; };
 		A1B97FCE1655108E00F2202A /* TTGLGlobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGLGlobals.h; sourceTree = "<group>"; };
 		A1E1403916516ED000D009D2 /* ledMatrixFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ledMatrixFragment.glsl; sourceTree = "<group>"; };
 		A1E1403A16516ED000D009D2 /* ledMatrixVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ledMatrixVertex.glsl; sourceTree = "<group>"; };
+		A1E4C329165A52D2000C8EF0 /* TTGLGlobals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGLGlobals.m; sourceTree = "<group>"; };
+		A1E4C338165A9040000C8EF0 /* VertBlurTextureFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = VertBlurTextureFragment.glsl; sourceTree = "<group>"; };
+		A1E4C339165A9040000C8EF0 /* VertBlurTextureVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = VertBlurTextureVertex.glsl; sourceTree = "<group>"; };
+		A1E4C33C165A92D0000C8EF0 /* ReflectionTextureVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ReflectionTextureVertex.glsl; sourceTree = "<group>"; };
+		A1E4C33E165A92DA000C8EF0 /* ReflectionTextureFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ReflectionTextureFragment.glsl; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,12 +129,16 @@
 		A10AB79F165022640071C923 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
-				A13580C416562F9F00A39F11 /* BlurTextureVertex.glsl */,
-				A13580C316562F9F00A39F11 /* BlurTextureFragment.glsl */,
+				A1E4C33C165A92D0000C8EF0 /* ReflectionTextureVertex.glsl */,
+				A1E4C33E165A92DA000C8EF0 /* ReflectionTextureFragment.glsl */,
+				A1E4C339165A9040000C8EF0 /* VertBlurTextureVertex.glsl */,
+				A1E4C338165A9040000C8EF0 /* VertBlurTextureFragment.glsl */,
+				A13580C416562F9F00A39F11 /* HorizBlurTextureVertex.glsl */,
+				A13580C316562F9F00A39F11 /* HorizBlurTextureFragment.glsl */,
 				A1E1403A16516ED000D009D2 /* ledMatrixVertex.glsl */,
 				A1E1403916516ED000D009D2 /* ledMatrixFragment.glsl */,
-				A1B97FB41654DBB500F2202A /* SolidBlackVertex.glsl */,
-				A1B97FB71654DBC400F2202A /* SolidBlackFragment.glsl */,
+				A1B97FB41654DBB500F2202A /* SolidColorVertex.glsl */,
+				A1B97FB71654DBC400F2202A /* SolidColorFragment.glsl */,
 				A10AB7A1165027EE0071C923 /* ColorBlendVertex.glsl */,
 				A10AB7A3165027FC0071C923 /* ColorBlendFragment.glsl */,
 				A10AB7B11650E3990071C923 /* SimpleTextureVertex.glsl */,
@@ -194,6 +208,7 @@
 				A10AB7B71650EF890071C923 /* TTGLTextureFrameBuffer.h */,
 				A10AB7B81650EF890071C923 /* TTGLTextureFrameBuffer.m */,
 				A1B97FCE1655108E00F2202A /* TTGLGlobals.h */,
+				A1E4C329165A52D2000C8EF0 /* TTGLGlobals.m */,
 				A13580DB1656892E00A39F11 /* redundantcode */,
 				A13580DD16568A4C00A39F11 /* TTGLImage.h */,
 				A13580DE16568A4C00A39F11 /* TTGLImage.m */,
@@ -284,13 +299,17 @@
 				A10AB7B41650E3A40071C923 /* SimpleTextureFragment.glsl in Resources */,
 				A1E1403B16516ED000D009D2 /* ledMatrixFragment.glsl in Resources */,
 				A1E1403C16516ED000D009D2 /* ledMatrixVertex.glsl in Resources */,
-				A1B97FB51654DBB500F2202A /* SolidBlackVertex.glsl in Resources */,
-				A1B97FB81654DBC500F2202A /* SolidBlackFragment.glsl in Resources */,
+				A1B97FB51654DBB500F2202A /* SolidColorVertex.glsl in Resources */,
+				A1B97FB81654DBC500F2202A /* SolidColorFragment.glsl in Resources */,
 				A1B876191655B7AE00B4781A /* avatar.png in Resources */,
-				A13580C516562F9F00A39F11 /* BlurTextureFragment.glsl in Resources */,
-				A13580C616562F9F00A39F11 /* BlurTextureVertex.glsl in Resources */,
+				A13580C516562F9F00A39F11 /* HorizBlurTextureFragment.glsl in Resources */,
+				A13580C616562F9F00A39F11 /* HorizBlurTextureVertex.glsl in Resources */,
 				A13580DA165688F900A39F11 /* avatar2.png in Resources */,
 				A13580DC1656892E00A39F11 /* redundantcode in Resources */,
+				A1E4C33A165A9040000C8EF0 /* VertBlurTextureFragment.glsl in Resources */,
+				A1E4C33B165A9040000C8EF0 /* VertBlurTextureVertex.glsl in Resources */,
+				A1E4C33D165A92D0000C8EF0 /* ReflectionTextureVertex.glsl in Resources */,
+				A1E4C33F165A92DA000C8EF0 /* ReflectionTextureFragment.glsl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,6 +332,7 @@
 				A13580DF16568A4D00A39F11 /* TTGLImage.m in Sources */,
 				01DC1CD01656988B00160EF4 /* TTGLLabel.m in Sources */,
 				A14F77551658EFF500FFDC0D /* TTDuelDetailView.m in Sources */,
+				A1E4C32A165A52D2000C8EF0 /* TTGLGlobals.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

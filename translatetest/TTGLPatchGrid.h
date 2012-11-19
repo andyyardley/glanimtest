@@ -21,6 +21,7 @@
 @property (assign, nonatomic) GLKMatrix4 position;
 @property (assign, nonatomic) GLKMatrix4 rotation;
 @property (assign, nonatomic) float         alpha;
+@property (assign, nonatomic) GLKVector4 color;
 
 - (id)initWithShaderName:(NSString *)shaderName;
 

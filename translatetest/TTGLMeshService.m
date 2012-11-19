@@ -107,6 +107,9 @@ const GLushort __indices[] = {
         _vertexCount = 4;
         _indexCount = 6;
         
+        float xStep = 1.0f/width;
+        float yStep = 1.0f/height;
+        
         width ++;
         height ++;
         
@@ -139,8 +142,8 @@ const GLushort __indices[] = {
             }
             
             for (int x = 0; x < width; x++) {
-                _vertices[nIndex].position[0] = x; // X
-                _vertices[nIndex].position[1] = y; // Y
+                _vertices[nIndex].position[0] = x * xStep; // X
+                _vertices[nIndex].position[1] = y * yStep; // Y
                 _vertices[nIndex].position[2] = 0; // Z
                 _vertices[nIndex].color[0] = red; // Red
                 _vertices[nIndex].color[1] = green; // Green

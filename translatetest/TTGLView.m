@@ -77,7 +77,7 @@
 //    GLfloat size = self.frame.size.height / self.frame.size.width;
 //    _projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), size, 0.01f, 1000.0f);
     
-    self.projectionMatrix = GLKMatrix4MakeOrtho(-1.0f, 1.0f, -0.0f, 1.0f, 0.01f, 1000.0f);
+    self.projectionMatrix = GLKMatrix4MakeOrtho(0.0f, 1.0f, -0.0f, 1.0f, 0.01f, 1000.0f);
     self.projectionMatrix = GLKMatrix4Multiply(_projectionMatrix, GLKMatrix4MakeLookAt(0, 0, 10, 0, 0, 0, 0, 1, 0));
     
 }
@@ -139,15 +139,11 @@
     
     CFTimeInterval step = 1.0f/60.0f;
     
-    CFTimeInterval delta = displayLink.timestamp - _lastTimestamp;
-    if (!_lastTimestamp) delta = step;
+    CFTimeInterval timeDelta = displayLink.timestamp - _lastTimestamp;
+    if (!_lastTimestamp) timeDelta = step;
     _lastTimestamp = displayLink.timestamp;
     
-    _pos += step * (delta / step);
-    
-    if (_pos > 5) {
-        _pos = 0;
-    }
+    float frameDelta = (step * (timeDelta / step));
     
     GLint framebufferWidth, framebufferHeight;
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &framebufferWidth);
@@ -157,13 +153,13 @@
     glClearColor(0.0f, 0.0f/255.0f, 0.0f/255.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     
-    [self render:_pos];
+    [self render:frameDelta];
     
     [self.eaglContext presentRenderbuffer:GL_RENDERBUFFER];
         
 }
 
-- (void)render:(GLfloat)currentFrame
+- (void)render:(GLfloat)delta
 {
     
 

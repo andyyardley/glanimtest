@@ -15,4 +15,6 @@ typedef struct {
     GLfloat texcoord[2];
 } Vertex3D;
 
+extern GLKMatrix4 matrixForRectInRect(CGRect rect, CGRect rect2);
+
 #endif

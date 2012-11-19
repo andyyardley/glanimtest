@@ -14,6 +14,11 @@
 #import "TTShaderService.h"
 
 #define GRID_COUNT 80
+#define PLAYER_COUNT 2
+#define TRANSITION_DURATION 2.0f
+
+#define REFLECTION_HEIGHT_RATIO (1.0f/5.0f)
+#define MAIN_HEIGHT_RATIO (1.0f - REFLECTION_HEIGHT_RATIO)
 
 @interface TTDuelDetailView ()
 {
@@ -21,8 +26,27 @@
     GLint _framebufferWidth, _framebufferHeight;
     float _start;
     float _end;
+    
+    float _graphFrame;
+    float _textFrame;
+    float _avatarFrame;
+    float _backgroundFrame;
+    
     float *_eq;
+    float *_startPos;
+    float *_endPos;
+    
+    BOOL _updating;
+    
+    CGRect _ledAreaRect;
+    CGRect _reflectionAreaRect;
+    
+    TTGLTexture *_leftAvatarTexture;
+    TTGLTexture *_rightAvatarTexture;
+    
 }
+
+@property (strong, nonatomic) TTGLPatchGrid *solidColorGrid;
 
 @property (strong, nonatomic) TTGLPatchGrid *leftColorGrid;
 @property (strong, nonatomic) TTGLPatchGrid *rightColorGrid;
@@ -30,6 +54,8 @@
 @property (strong, nonatomic) TTGLPatchGrid *ledGrid;
 @property (strong, nonatomic) TTGLPatchGrid *textureGrid;
 @property (strong, nonatomic) TTGLPatchGrid *reflectionGrid;
+@property (strong, nonatomic) TTGLPatchGrid *horizBlurGrid;
+@property (strong, nonatomic) TTGLPatchGrid *vertBlurGrid;
 
 @property (strong, nonatomic) TTGLImage     *leftAvatarGrid;
 @property (strong, nonatomic) TTGLImage     *rightAvatarGrid;
@@ -39,7 +65,9 @@
 
 @property (strong, nonatomic) TTGLTextureFrameBuffer *textureFrameBuffer;
 @property (strong, nonatomic) TTGLTextureFrameBuffer *ledFrameBuffer;
-@property (strong, nonatomic) TTGLTextureFrameBuffer *reflectionFrameBuffer;
+@property (strong, nonatomic) TTGLTextureFrameBuffer *reflectionFrameBufferA;
+@property (strong, nonatomic) TTGLTextureFrameBuffer *reflectionFrameBufferB;
+@property (strong, nonatomic) TTGLTextureFrameBuffer *avatarFrameBuffer;
 
 // Data
 @property (strong, nonatomic) NSMutableArray *playerNames;
@@ -60,16 +88,24 @@
     // Load shaders
     [[TTShaderService sharedInstance] loadShader:@"ColorBlend" forKey:kColorBlendShader];
     [[TTShaderService sharedInstance] loadShader:@"ledMatrix" forKey:kLedMatrixShader];
-    [[TTShaderService sharedInstance] loadShader:@"SolidBlack" forKey:kSolidBlackShader];
+    [[TTShaderService sharedInstance] loadShader:@"SolidColor" forKey:kSolidColorShader];
     [[TTShaderService sharedInstance] loadShader:@"SimpleTexture" forKey:kSimpleTextureShader];
-    [[TTShaderService sharedInstance] loadShader:@"BlurTexture" forKey:kBlurTextureShader];
+    [[TTShaderService sharedInstance] loadShader:@"HorizBlurTexture" forKey:kHorizBlurTextureShader];
+    [[TTShaderService sharedInstance] loadShader:@"VertBlurTexture" forKey:kVertBlurTextureShader];
+    [[TTShaderService sharedInstance] loadShader:@"ReflectionTexture" forKey:kReflectionTextureShader];
     
     _grids = [NSMutableArray array];
     
     for (int i=0; i<GRID_COUNT; i++) {
         _eq[i] = 1.0f;
-        [_grids addObject:[[TTGLPatchGrid alloc] initWithShaderName:kSolidBlackShader]];
+        [_grids addObject:[[TTGLPatchGrid alloc] initWithShaderName:kSolidColorShader]];
     }
+    
+    _solidColorGrid = [[TTGLPatchGrid alloc] initWithShaderName:kSolidColorShader];
+    _solidColorGrid.color = GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f);
+    
+    _ledAreaRect = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height * MAIN_HEIGHT_RATIO);
+    _reflectionAreaRect = CGRectMake(0, self.bounds.size.height * MAIN_HEIGHT_RATIO, self.bounds.size.width, self.bounds.size.height * REFLECTION_HEIGHT_RATIO);
     
     _leftColorGrid = [[TTGLPatchGrid alloc] initWithShaderName:kColorBlendShader];
     _leftColorGrid.mesh = [[TTGLMeshService sharedInstance] patchWithWidth:1 andHeight:4];
@@ -80,31 +116,50 @@
     _ledGrid.mesh = [[TTGLMeshService sharedInstance] patchWithWidth:320/4 andHeight:280/4];
     
     _textureGrid = [[TTGLPatchGrid alloc] initWithShaderName:kSimpleTextureShader];
-    _reflectionGrid = [[TTGLPatchGrid alloc] initWithShaderName:kBlurTextureShader];
+    _horizBlurGrid = [[TTGLPatchGrid alloc] initWithShaderName:kHorizBlurTextureShader];
+    _vertBlurGrid = [[TTGLPatchGrid alloc] initWithShaderName:kVertBlurTextureShader];
+    _reflectionGrid = [[TTGLPatchGrid alloc] initWithShaderName:kReflectionTextureShader];
     
     _leftScore = [TTGLLabel labelWithText:@"TEST" andFont:[UIFont systemFontOfSize:20.0f]];
-    _leftScore.color = [UIColor whiteColor];
+    _leftScore.textColor = [UIColor whiteColor];
     
     _rightScore = [TTGLLabel labelWithText:@"TEST" andFont:[UIFont systemFontOfSize:20.0f]];
-    _rightScore.color = [UIColor whiteColor];
+    _rightScore.textColor = [UIColor whiteColor];
     
-    _reflectionFrameBuffer = [[TTGLTextureFrameBuffer alloc] initWithWidth:self.frame.size.width / 4 height:(self.frame.size.height * 0.1) / 2];
-    _textureFrameBuffer = [[TTGLTextureFrameBuffer alloc] initWithWidth:80 height:70];
+    _reflectionFrameBufferA = [[TTGLTextureFrameBuffer alloc] initWithWidth:_reflectionAreaRect.size.width / 1.0 height:_reflectionAreaRect.size.height / 4.0];
+    _reflectionFrameBufferB = [[TTGLTextureFrameBuffer alloc] initWithWidth:_reflectionAreaRect.size.width / 1.0 height:_reflectionAreaRect.size.height / 4.0];
+
+    _textureFrameBuffer = [[TTGLTextureFrameBuffer alloc] initWithWidth:self.bounds.size.width / 4 height:_ledAreaRect.size.height / 4];
     _ledFrameBuffer = [[TTGLTextureFrameBuffer alloc] initWithWidth:self.frame.size.width * self.contentScaleFactor height:self.frame.size.height * self.contentScaleFactor];
 
+    _avatarFrameBuffer = [[TTGLTextureFrameBuffer alloc] initWithWidth:60 * self.contentScaleFactor height:70 * self.contentScaleFactor];
+    
 }
 
 - (void)start
 {
-
+    
+    _startPos = (float*)malloc(PLAYER_COUNT * sizeof(float));
+    _endPos = (float*)malloc(PLAYER_COUNT * sizeof(float));
+    
     _playerNames = [NSMutableArray array];
     _playerScores = [NSMutableArray array];
     _playerImageNames = [NSMutableArray array];
     
-    for (int i=0; i < 2; i++) {
+    float sumScore = 0.0f;
+    
+    for (int i=0; i < PLAYER_COUNT; i++) {
+        float score = [self.delegate detailView:self scoreForPlayerAtIndex:i];
+        sumScore += score;
+        _startPos[i] = 0.0f;
         [_playerNames addObject:[self.delegate detailView:self nameForPlayerAtIndex:i]];
-        [_playerScores addObject:[NSNumber numberWithFloat:[self.delegate detailView:self scoreForPlayerAtIndex:i]]];
+        [_playerScores addObject:[NSNumber numberWithFloat:score]];
         [_playerImageNames addObject:[self.delegate detailView:self imageNameForPlayerAtIndex:i]];
+    }
+    
+    for (int i=0; i < PLAYER_COUNT; i++) {
+        float score = [[_playerScores objectAtIndex:0] floatValue];
+        _endPos[i] = score / sumScore;
     }
     
     _leftAvatarGrid = [TTGLImage imageNamed:[_playerImageNames objectAtIndex:0]];
@@ -113,7 +168,38 @@
     _leftScore.text = [[_playerScores objectAtIndex:0] stringValue];
     _rightScore.text = [[_playerScores objectAtIndex:1] stringValue];
     
+    _solidColorGrid.color = GLKVector4Make(1.0f, 1.0f, 1.0f, 1.0f);
+    
+    // Left Avatar
+    [_avatarFrameBuffer begin];
+    _solidColorGrid.position = GLKMatrix4Identity;
+    [_solidColorGrid renderWithProjectionMatrix:self.projectionMatrix];
+    _leftAvatarGrid.position = matrixForRectInRect(CGRectMake(2, 2, 56, 56), CGRectMake(0, 0, 60, 70));
+    [_leftAvatarGrid renderWithProjectionMatrix:self.projectionMatrix];
+    [_avatarFrameBuffer end];
+    _leftAvatarTexture = _avatarFrameBuffer.texture;
+    
+    [_avatarFrameBuffer createNew];
+    
+    // Right Avatar
+    [_avatarFrameBuffer begin];
+    _solidColorGrid.position = GLKMatrix4Identity;
+    [_solidColorGrid renderWithProjectionMatrix:self.projectionMatrix];
+    _rightAvatarGrid.position = matrixForRectInRect(CGRectMake(2, 2, 56, 56), CGRectMake(0, 0, 60, 70));
+    [_rightAvatarGrid renderWithProjectionMatrix:self.projectionMatrix];
+    [_avatarFrameBuffer end];
+    _rightAvatarTexture = _avatarFrameBuffer.texture;
+    
     [super start];
+    
+}
+
+- (void)dealloc
+{
+    
+    free(_eq);
+    free(_startPos);
+    free(_endPos);
     
 }
 
@@ -127,135 +213,204 @@
     return (time < 0.5f)? 0.5f * powf(time * 2.0f, 3.0f): 0.5f * powf(time * 2.0f - 2.0f, 3.0f) + 1.0f;
 }
 
-- (void)render:(GLfloat)currentFrame
+- (void)update
 {
-
-    float _animPos = [self easeInOut:MAX(0.0f, MIN(1.0f, (currentFrame - 1.0f) / 2.0f))];
     
-    [_textureFrameBuffer begin];
-    
-    _leftColorGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(-1.0f, MIN(0, -1.5f + ((MAX(0, currentFrame-1) / 4) * 1.5)), 0.0f), GLKMatrix4MakeScale(1.0f, 1.0f, 1.0f));
-    _leftColorGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(-1.0f, MIN(0, -0.5f), 0.0f), GLKMatrix4MakeScale(1.0f, 0.5f, 1.0f));
-    [_leftColorGrid renderWithProjectionMatrix:self.projectionMatrix];
-    _rightColorGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(0.0f, MAX(-3.0, -1.5f - ((MAX(0, currentFrame-1) / 4) * 1.5)), 0.0f), GLKMatrix4MakeScale(1.0f, 1.0f, 1.0f));
-    _rightColorGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(0.0f, MAX(-3.0, -0.5f), 0.0f), GLKMatrix4MakeScale(1.0f, 0.5f, 1.0f));
-    [_rightColorGrid renderWithProjectionMatrix:self.projectionMatrix];
-    
-    float sumScore = [[_playerScores objectAtIndex:0] floatValue] + [[_playerScores objectAtIndex:1] floatValue];
-    
-    for (int i=0; i<GRID_COUNT; i++) {
+    if (_graphFrame > TRANSITION_DURATION + 1.0f) {
         
-        TTGLPatchGrid *grid = [_grids objectAtIndex:i];
+        _graphFrame = 0.0f;
+        _textFrame  = TRANSITION_DURATION;
+        _backgroundFrame = TRANSITION_DURATION;
         
-        CGFloat x = 0;
-        
-        float end = 0.0f;
-        
-        if (i<(GRID_COUNT/2)) {
-            x = ((float)i/GRID_COUNT) * 2;
-            end = [[_playerScores objectAtIndex:0] floatValue] / sumScore;
-        } else {
-            x = (((float)i/GRID_COUNT) * 2) - 1.0;
-            end = [[_playerScores objectAtIndex:1] floatValue] / sumScore;
+        for (int i=0; i<PLAYER_COUNT; i++) {
+            _startPos[i] = _endPos[i];
         }
         
-//        end = (end * 0.6f) + 0.2f;
+        _endPos[0] = (float)(arc4random()%100) / 100.0f;
+        _endPos[1] = 1.0f - _endPos[0];
         
-        float pixelsize = 4.0f/280.0f;
-        
-        float y = [self amplitudeForOffset:x start:_start end:end timeshift:currentFrame-1.0f];
-        
-        float diff = MIN(1.0f, MAX(0.0f, y-end));
-        
-//        for (int n=0; n<2; n++) {
-        
-//            _eq[i] += 0.04f;
-        
-            _eq[i] = MIN(_eq[i], y);
-        
-            y = MAX(0.0f, y);
-        
-            _eq[i] += (y - _eq[i]) * 0.3f;
-        
-            diff = y - _eq[i];
-        
-            float ratio = diff / y;
-            
-            // 0.5, 0.5
-            // 0.2, 0.8
-            grid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(((1.0f / GRID_COUNT) * i * 2) - 1.0f, 1.0f - _eq[i], 0), GLKMatrix4MakeScale((1.0f / GRID_COUNT) * 2.0f, _eq[i], 1.0f));
-            [grid renderWithProjectionMatrix:self.projectionMatrix];
-            grid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(((1.0f / GRID_COUNT) * i * 2) - 1.0f, 1.0f - _eq[i] - diff - pixelsize, 0), GLKMatrix4MakeScale((1.0f / GRID_COUNT) * 2.0f, diff, 1.0f));
-//            grid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(((1.0f / GRID_COUNT) * i * 2) - 1.0f, 1.0f - _eq[i], 0), GLKMatrix4MakeScale((1.0f / GRID_COUNT) * 2.0f, pixelsize, 1.0f));
-            [grid renderWithProjectionMatrix:self.projectionMatrix];
-//        }
+        _updating = YES;
         
     }
     
-    _rightScore.alpha = _animPos;
-    _rightScore.position = GLKMatrix4MakeScale((45.0f/160.0)*2.0f, (24.0f/(280.0f*0.9f))*2.0f, 1.0f);
-    _rightScore.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(0.0f, 0.5f, 0.0f), _rightScore.position);
+}
+
+- (void)render:(GLfloat)delta
+{
+    
+    _graphFrame         += delta;
+    _avatarFrame        += delta;
+    _textFrame          += delta;
+
+    float _backgroundPos;
+    
+    if (_updating) {
+        if (_graphFrame < TRANSITION_DURATION/2) {
+            _backgroundFrame -= delta * 2.0;
+            _textFrame       -= delta * 2.0;
+        } else {
+            _backgroundFrame += delta * 2.0;
+            _textFrame       += delta * 2.0;
+        }
+    } else {
+        _backgroundFrame += delta;
+    }
+    
+    _backgroundPos = [self easeInOut:MAX(0.0f, MIN(1.0f, (_backgroundFrame) / TRANSITION_DURATION))];
+    
+    float _avatarPos = [self easeInOut:MAX(0.0f, MIN(1.0f, (_avatarFrame - 1.0f) / 2.0f))];
+    float _textPos = [self easeInOut:MAX(0.0f, MIN(1.0f, (_textFrame - 1.0f) / 2.0f))];
+
+    [_textureFrameBuffer begin];
+    
+    _leftColorGrid.position = matrixForRectInRect(CGRectMake(0, -_ledAreaRect.size.height - ((_ledAreaRect.size.height * 2.0f) * _backgroundPos), 160, _ledAreaRect.size.height * (3 + (1.0f * _backgroundPos))), _ledAreaRect);
+    [_leftColorGrid renderWithProjectionMatrix:self.projectionMatrix];
+    _rightColorGrid.position = matrixForRectInRect(CGRectMake(160, -_ledAreaRect.size.height * (1.0f - _backgroundPos), 160, _ledAreaRect.size.height * (3 + (1.0f * _backgroundPos))), _ledAreaRect);
+    [_rightColorGrid renderWithProjectionMatrix:self.projectionMatrix];
+    
+    int player = 0;
+    
+    _solidColorGrid.color = GLKVector4Make(0.1f, 0.1f, 0.1f, 1.0f);
+    
+    for (int i=0; i<GRID_COUNT; i++) {
+        
+//        TTGLPatchGrid *grid = [_grids objectAtIndex:i];
+        
+        CGFloat x = 0;
+        
+        if (i<(GRID_COUNT/2)) {
+            x = ((float)i/GRID_COUNT) * 2;
+        } else {
+            x = (((float)i/GRID_COUNT) * 2) - 1.0;
+            player = 1;
+        }
+        
+        float pixelsize = 4.0f/280.0f;
+        
+        float y = [self amplitudeForOffset:x start:_startPos[player] end:_endPos[player] timeshift:_graphFrame];
+        
+        y *= 0.8;
+        y += 0.2;
+        
+        float diff = MIN(1.0f, MAX(0.0f, y-_endPos[player]));
+        
+        _eq[i] = MIN(_eq[i], y);
+    
+        y = MAX(0.0f, y);
+    
+        _eq[i] += (y - _eq[i]) * 0.1f;
+    
+        diff = y - _eq[i];
+
+        TTGLPatchGrid *grid = _solidColorGrid;
+        
+        grid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(((1.0f / GRID_COUNT) * i * 2)/2.0f, 1.0f - _eq[i], 0), GLKMatrix4MakeScale((1.0f / GRID_COUNT) * 1.0f, _eq[i], 1.0f));
+        [grid renderWithProjectionMatrix:self.projectionMatrix];
+        grid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(((1.0f / GRID_COUNT) * i * 2)/2.0f, 1.0f - _eq[i] - diff - pixelsize, 0), GLKMatrix4MakeScale((1.0f / GRID_COUNT) * 1.0f, diff, 1.0f));
+        [grid renderWithProjectionMatrix:self.projectionMatrix];
+
+    }
+    
+    _leftScore.alpha = _textPos;
+    _leftScore.position = matrixForRectInRect(CGRectMake((160-_leftScore.size.width)/2, 0, _leftScore.size.width, _leftScore.size.height), _ledAreaRect);
+    [_leftScore renderWithProjectionMatrix:self.projectionMatrix];
+    
+    _rightScore.alpha = _textPos;
+    _rightScore.position = matrixForRectInRect(CGRectMake(((160-_rightScore.size.width)/2 + 160), 0, _rightScore.size.width, _rightScore.size.height), _ledAreaRect);
     [_rightScore renderWithProjectionMatrix:self.projectionMatrix];
     
     [_textureFrameBuffer end];
     
-    [_ledFrameBuffer begin];
-    
     TTGLTexture *texture = _textureFrameBuffer.texture;
+
     
+//    [_ledFrameBuffer begin];
+//    
     _ledGrid.texture = texture;
-    
-    _ledGrid.position = GLKMatrix4MakeScale(1.0f/(320/4), 1.0f/(280/4), 0);
-    //    _textureGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeScale(2.0f, 0.9f, 1.0f), _textureGrid.position);
-    //    _textureGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(-1.0f, 0.1f, 0), _textureGrid.position);
-    _ledGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeScale(2.0f, 1.0f, 1.0f), _ledGrid.position);
-    _ledGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(-1.0f, 0.0f, 0), _ledGrid.position);
+    _ledGrid.position = matrixForRectInRect(_ledAreaRect, self.bounds);
+//    _ledGrid.position = GLKMatrix4MakeScale(1.0f/(self.bounds.size.width/4), 1.0f/(self.bounds.size.height/4), 0);
+//    _ledGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeScale(1.0f, 1.0f, 1.0f), _ledGrid.position);
+//    _ledGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(0.0f, 0.0f, 0), _ledGrid.position);
     [_ledGrid renderWithProjectionMatrix:self.projectionMatrix];
+//
+   //
+//    [_ledFrameBuffer end];
+//    
+//    _textureGrid.texture = _textureFrameBuffer.texture;
+//    _textureGrid.position = matrixForRectInRect(_ledAreaRect, self.bounds);
+//    [_textureGrid renderWithProjectionMatrix:self.projectionMatrix];
     
-    _leftAvatarGrid.position = GLKMatrix4Identity;
-    _leftAvatarGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeScale(0.5f, 0.25f, 1.0f), _leftAvatarGrid.position);
-    _leftAvatarGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(1.25f - _animPos, 0.05f, 0), _leftAvatarGrid.position);
-    [_leftAvatarGrid renderWithProjectionMatrix:self.projectionMatrix];
     
-    _rightAvatarGrid.position = GLKMatrix4Identity;
-    _rightAvatarGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeScale(0.5f, 0.25f, 1.0f), _rightAvatarGrid.position);
-    //    _rightAvatarGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeScale(-1.0f, -1.0f, 1.0f), _rightAvatarGrid.position);
-    _rightAvatarGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(-1.75f + _animPos, 0.05f, 0), _rightAvatarGrid.position);
-    [_rightAvatarGrid renderWithProjectionMatrix:self.projectionMatrix];
-
-    [_ledFrameBuffer end];
     
-    texture = _ledFrameBuffer.texture;
-    _textureGrid.texture = texture;
     
-    [_reflectionFrameBuffer begin];
-    _textureGrid.position = GLKMatrix4Identity;
-    _textureGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeScale(2.0f, 1.0f, 1.0f), _textureGrid.position);
-    _textureGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(-1.0f, 0.0f, 0), _textureGrid.position);
-    [_textureGrid renderWithProjectionMatrix:self.projectionMatrix];
-    [_reflectionFrameBuffer end];
     
-    _textureGrid.position = GLKMatrix4Identity;
-    _textureGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeScale(2.0f, 0.9f, 1.0f), _textureGrid.position);
-    _textureGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(-1.0f, 0.1f, 0), _textureGrid.position);
+    [_reflectionFrameBufferA begin];
+    
+    _textureGrid.texture = _textureFrameBuffer.texture;
+    _textureGrid.position = GLKMatrix4Identity; //matrixForRectInRect(_reflectionAreaRect, self.bounds);
     [_textureGrid renderWithProjectionMatrix:self.projectionMatrix];
     
-    texture = _reflectionFrameBuffer.texture;
+    // Left Avatar
+    _textureGrid.texture = _leftAvatarTexture;
+    _textureGrid.position = matrixForRectInRect(CGRectMake((80-30) - (160 * (1.0f - _avatarPos)), 0, 60, 70), self.bounds);
+    [_textureGrid renderWithProjectionMatrix:self.projectionMatrix];
+    
+    // Right Avatar
+    _textureGrid.texture = _rightAvatarTexture;
+    _textureGrid.position = matrixForRectInRect(CGRectMake(160 + (80-30) + (160 * (1.0f - _avatarPos)), 0, 60, 70), self.bounds);
+    [_textureGrid renderWithProjectionMatrix:self.projectionMatrix];
+    [_reflectionFrameBufferA end];
+    
+    [_reflectionFrameBufferB begin];
+    _horizBlurGrid.texture = _reflectionFrameBufferA.texture;
+    _horizBlurGrid.position = GLKMatrix4Identity;
+    _horizBlurGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeScale(1.0f, -1.0f, 1.0f), _horizBlurGrid.position);
+    _horizBlurGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(0.0f, 1.0f, 0), _horizBlurGrid.position);
+    [_horizBlurGrid renderWithProjectionMatrix:self.projectionMatrix];
+    [_reflectionFrameBufferB end];
+        
+    [_reflectionFrameBufferA begin];
+    _vertBlurGrid.texture = _reflectionFrameBufferB.texture;
+    _vertBlurGrid.position = GLKMatrix4Identity;
+    [_vertBlurGrid renderWithProjectionMatrix:self.projectionMatrix];
+    [_reflectionFrameBufferA end];
+    
+//    for (int i=0; i<1; i++) {
+//    
+//        [_reflectionFrameBufferB begin];
+//        _horizBlurGrid.texture = _reflectionFrameBufferA.texture;
+//        _horizBlurGrid.position = GLKMatrix4Identity;
+//        [_horizBlurGrid renderWithProjectionMatrix:self.projectionMatrix];
+//        [_reflectionFrameBufferB end];
+//        
+//        [_reflectionFrameBufferA begin];
+//        _vertBlurGrid.texture = _reflectionFrameBufferB.texture;
+//        _vertBlurGrid.position = GLKMatrix4Identity;
+//        [_vertBlurGrid renderWithProjectionMatrix:self.projectionMatrix];
+//        [_reflectionFrameBufferA end];
+//        
+//    }
+    
+    texture = _reflectionFrameBufferA.texture;
     _reflectionGrid.texture = texture;
-    
-    _reflectionGrid.position = GLKMatrix4Identity;
-    _reflectionGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeScale(2.0f, -0.1f, 1.0f), _reflectionGrid.position);
-    _reflectionGrid.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(-1.0f, 0.1f, 0), _reflectionGrid.position);
+    _reflectionGrid.position = matrixForRectInRect(_reflectionAreaRect, self.bounds);
     [_reflectionGrid renderWithProjectionMatrix:self.projectionMatrix];
-    
-    _leftScore.alpha = _animPos;
-    _leftScore.position = GLKMatrix4MakeScale(45.0f/160.0, 24.0f/(280.0f*0.9f), 1.0f);
-    _leftScore.position = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(-1.0f, 0.5f, 0.0f), _leftScore.position);
-    [_leftScore renderWithProjectionMatrix:self.projectionMatrix];
 
-    [super render:currentFrame];
+    // Left Avatar
+    _textureGrid.texture = _leftAvatarTexture;
+    _textureGrid.position = matrixForRectInRect(CGRectMake((80-30) - (160 * (1.0f - _avatarPos)), self.bounds.size.height - 70 - 35, 60, 70), self.bounds);
+    [_textureGrid renderWithProjectionMatrix:self.projectionMatrix];
+    
+    // Right Avatar
+    _textureGrid.texture = _rightAvatarTexture;
+    _textureGrid.position = matrixForRectInRect(CGRectMake(160 + (80-30) + (160 * (1.0f - _avatarPos)), self.bounds.size.height - 70 - 35, 60, 70), self.bounds);
+    [_textureGrid renderWithProjectionMatrix:self.projectionMatrix];
+
+    
+    [super render:delta];
     
 }
+
 
 - (CGFloat)amplitudeForOffset:(float)x start:(float)start end:(float)end timeshift:(NSTimeInterval)shift
 {

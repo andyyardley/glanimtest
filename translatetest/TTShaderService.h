@@ -17,12 +17,15 @@ static NSString *kProjectionUniform     = @"ProjectionView";
 static NSString *kTextureCoordAttribute = @"TexCoordIn";
 static NSString *kTextureUniform        = @"Texture";
 static NSString *kAlphaUniform          = @"Alpha";
+static NSString *kSolidColorUniform     = @"SolidColor";
 
-static NSString *kColorBlendShader      = @"ColorBlendShader";
-static NSString *kSimpleTextureShader   = @"SimpleTextureShader";
-static NSString *kLedMatrixShader       = @"LedMatrixShader";
-static NSString *kSolidBlackShader      = @"SolidBlackShader";
-static NSString *kBlurTextureShader     = @"BlurTextureShader";
+static NSString *kColorBlendShader          = @"ColorBlendShader";
+static NSString *kSimpleTextureShader       = @"SimpleTextureShader";
+static NSString *kLedMatrixShader           = @"LedMatrixShader";
+static NSString *kSolidColorShader          = @"SolidColorShader";
+static NSString *kHorizBlurTextureShader    = @"HorizBlurTextureShader";
+static NSString *kVertBlurTextureShader     = @"VertBlurTextureShader";
+static NSString *kReflectionTextureShader   = @"ReflectionTextureShader";
 
 @interface TTShaderService : NSObject
 
