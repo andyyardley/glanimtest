@@ -7,7 +7,7 @@
 //
 
 #import "TTGLPatchGrid.h"
-#import "TTShaderService.h"
+#import "TTGLShaderService.h"
 
 //const Vertex3D __vertices[] = {
 //    {{0, 0, 0}, {1, 0, 0, 1}, {0, 0}},
@@ -117,7 +117,7 @@
 - (void)setupShader
 {
     
-    TTShaderProgram *shaderProgram = [[TTShaderService sharedInstance] activateShaderForKey:_shaderName];
+    TTGLShaderProgram *shaderProgram = [[TTGLShaderService sharedInstance] activateShaderForKey:_shaderName];
     
     _viewUniform = [shaderProgram uniformForName:kViewUniform];
     _projectionUniform = [shaderProgram uniformForName:kProjectionUniform];
@@ -146,7 +146,7 @@
     _viewMatrix = GLKMatrix4Identity;
     _viewMatrix = GLKMatrix4Multiply(_position, _viewMatrix);
     
-    TTShaderProgram *shaderProgram = [[TTShaderService sharedInstance] activateShaderForKey:_shaderName];
+    TTGLShaderProgram *shaderProgram = [[TTGLShaderService sharedInstance] activateShaderForKey:_shaderName];
 
 //    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
 //    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
@@ -169,8 +169,8 @@
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, self.texture.glTexture);
         glUniform1i(_textureUniform, 0);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // Linear Filtering
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // Linear Filtering
+//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // Linear Filtering
+//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // Linear Filtering
 //        glEnable(GL_TEXTURE_2D);
         glUniform2f([shaderProgram uniformForName:@"TexSize"], self.texture.size.width, self.texture.size.height);
     }

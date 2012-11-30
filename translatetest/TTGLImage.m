@@ -7,7 +7,7 @@
 //
 
 #import "TTGLImage.h"
-#import "TTShaderService.h"
+#import "TTGLShaderService.h"
 
 @implementation TTGLImage
 

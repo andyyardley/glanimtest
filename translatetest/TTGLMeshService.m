@@ -61,7 +61,6 @@ static TTGLMeshService *instance = nil;
     
     if (_activeMeshKey == mesh.key) return;
     
-//    TTGLMesh *mesh = [_meshes objectForKey:key];
     [mesh activate];
     
     _activeMeshKey = mesh.key;
@@ -87,37 +86,28 @@ static TTGLMeshService *instance = nil;
 
 @implementation TTGLMesh
 
-const Vertex3D __vertices[] = {
-    {{0, 0, 0}, {1, 0, 0, 1}, {0, 0}},
-    {{1, 0, 0}, {0, 0, 1, 1}, {1, 0}},
-    {{0, 1, 0}, {0, 1, 0, 1}, {0, 1}},
-    {{1, 1, 0}, {0, 1, 0, 1}, {1, 1}}
-};
-
-const GLushort __indices[] = {
-    0, 1, 2,
-    1, 3, 2
-};
+//const Vertex3D __vertices[] = {
+//    {{0, 0, 0}, {1, 0, 0, 1}, {0, 0}},
+//    {{1, 0, 0}, {0, 0, 1, 1}, {1, 0}},
+//    {{0, 1, 0}, {0, 1, 0, 1}, {0, 1}},
+//    {{1, 1, 0}, {0, 1, 0, 1}, {1, 1}}
+//};
+//
+//const GLushort __indices[] = {
+//    0, 1, 2,
+//    1, 3, 2
+//};
 
 - (id)initPatchWithWidth:(GLuint)width andHeight:(GLuint)height
 {
     
     if (self = [super init]) {
         
-        _vertexCount = 4;
-        _indexCount = 6;
-        
         float xStep = 1.0f/width;
         float yStep = 1.0f/height;
         
         width ++;
         height ++;
-        
-        _vertices = (Vertex3D *)malloc(sizeof(Vertex3D)*4);
-        memcpy(_vertices, __vertices, sizeof(Vertex3D)*4);
-        
-        _indices = (GLushort *)malloc(sizeof(GLushort)*6);
-        memcpy(_indices, __indices, sizeof(GLushort)*6);
         
         int nIndex = 0;
         
@@ -187,19 +177,11 @@ const GLushort __indices[] = {
         
 }
 
-//- (void)setVertices:(Vertex3D *)vertices count:(GLuint)count
-//{
-//    _vertexCount = count;
-//    _vertices = (Vertex3D*)malloc(sizeof(Vertex3D)*count);
-//    memcpy(_vertices, vertices, sizeof(Vertex3D)*count);
-//}
-//
-//- (void)setIndices:(GLushort *)indices count:(GLuint)count
-//{
-//    _indexCount = count;
-//    _indices = (GLushort *)malloc(sizeof(GLushort)*count);
-//    memcpy(_indices, indices, sizeof(GLushort)*count);
-//}
+- (void)dealloc
+{
+    free(_vertices);
+    free(_indices);
+}
 
 - (void)setupVBOs
 {
@@ -219,10 +201,7 @@ const GLushort __indices[] = {
     
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-//    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), 0);
-//    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), (GLvoid*) (sizeof(GLfloat) * 3));
-//    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), (GLvoid*) (sizeof(GLfloat) * 7));
-    
+
 }
 
 - (void)render

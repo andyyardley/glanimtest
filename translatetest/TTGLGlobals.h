@@ -9,6 +9,8 @@
 #ifndef translatetest_TTGLGlobals_h
 #define translatetest_TTGLGlobals_h
 
+#define CONSTRAIN(min, max, value) MIN(max, MAX(min, value))
+
 typedef struct {
     GLfloat position[3];
     GLfloat color[4];

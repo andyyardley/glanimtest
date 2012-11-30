@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		01DC1CD01656988B00160EF4 /* TTGLLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DC1CCF1656988B00160EF4 /* TTGLLabel.m */; };
-		A10AB794164EB6C20071C923 /* TTShaderService.m in Sources */ = {isa = PBXBuildFile; fileRef = A10AB793164EB6C20071C923 /* TTShaderService.m */; };
+		A10AB794164EB6C20071C923 /* TTGLShaderService.m in Sources */ = {isa = PBXBuildFile; fileRef = A10AB793164EB6C20071C923 /* TTGLShaderService.m */; };
 		A10AB797164EC0CD0071C923 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10AB796164EC0CD0071C923 /* OpenGLES.framework */; };
 		A10AB79A164FB5FB0071C923 /* TTGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = A10AB799164FB5FB0071C923 /* TTGLView.m */; };
 		A10AB7A2165027EE0071C923 /* ColorBlendVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = A10AB7A1165027EE0071C923 /* ColorBlendVertex.glsl */; };
@@ -53,8 +53,8 @@
 /* Begin PBXFileReference section */
 		01DC1CCE1656988B00160EF4 /* TTGLLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGLLabel.h; sourceTree = "<group>"; };
 		01DC1CCF1656988B00160EF4 /* TTGLLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGLLabel.m; sourceTree = "<group>"; };
-		A10AB792164EB6C20071C923 /* TTShaderService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTShaderService.h; sourceTree = "<group>"; };
-		A10AB793164EB6C20071C923 /* TTShaderService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTShaderService.m; sourceTree = "<group>"; };
+		A10AB792164EB6C20071C923 /* TTGLShaderService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGLShaderService.h; sourceTree = "<group>"; };
+		A10AB793164EB6C20071C923 /* TTGLShaderService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGLShaderService.m; sourceTree = "<group>"; };
 		A10AB796164EC0CD0071C923 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		A10AB798164FB5FB0071C923 /* TTGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGLView.h; sourceTree = "<group>"; };
 		A10AB799164FB5FB0071C923 /* TTGLView.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; fileEncoding = 4; path = TTGLView.m; sourceTree = "<group>"; };
@@ -129,12 +129,9 @@
 		A10AB79F165022640071C923 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				A11EA88B165ABA1900F1B312 /* Blur */,
 				A1E4C33C165A92D0000C8EF0 /* ReflectionTextureVertex.glsl */,
 				A1E4C33E165A92DA000C8EF0 /* ReflectionTextureFragment.glsl */,
-				A1E4C339165A9040000C8EF0 /* VertBlurTextureVertex.glsl */,
-				A1E4C338165A9040000C8EF0 /* VertBlurTextureFragment.glsl */,
-				A13580C416562F9F00A39F11 /* HorizBlurTextureVertex.glsl */,
-				A13580C316562F9F00A39F11 /* HorizBlurTextureFragment.glsl */,
 				A1E1403A16516ED000D009D2 /* ledMatrixVertex.glsl */,
 				A1E1403916516ED000D009D2 /* ledMatrixFragment.glsl */,
 				A1B97FB41654DBB500F2202A /* SolidColorVertex.glsl */,
@@ -147,11 +144,22 @@
 			name = Shaders;
 			sourceTree = "<group>";
 		};
+		A11EA88B165ABA1900F1B312 /* Blur */ = {
+			isa = PBXGroup;
+			children = (
+				A1E4C339165A9040000C8EF0 /* VertBlurTextureVertex.glsl */,
+				A1E4C338165A9040000C8EF0 /* VertBlurTextureFragment.glsl */,
+				A13580C416562F9F00A39F11 /* HorizBlurTextureVertex.glsl */,
+				A13580C316562F9F00A39F11 /* HorizBlurTextureFragment.glsl */,
+			);
+			name = Blur;
+			sourceTree = "<group>";
+		};
 		A13580C816563F3B00A39F11 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				A10AB792164EB6C20071C923 /* TTShaderService.h */,
-				A10AB793164EB6C20071C923 /* TTShaderService.m */,
+				A10AB792164EB6C20071C923 /* TTGLShaderService.h */,
+				A10AB793164EB6C20071C923 /* TTGLShaderService.m */,
 				A1B876021655601B00B4781A /* TTGLTextureService.h */,
 				A1B876031655601B00B4781A /* TTGLTextureService.m */,
 				A13580C91656406C00A39F11 /* TTGLMeshService.h */,
@@ -323,7 +331,7 @@
 				A19DA6B7164D365B0087DD98 /* main.m in Sources */,
 				A19DA6BB164D365B0087DD98 /* TTAppDelegate.m in Sources */,
 				A19DA6C4164D365C0087DD98 /* TTViewController.m in Sources */,
-				A10AB794164EB6C20071C923 /* TTShaderService.m in Sources */,
+				A10AB794164EB6C20071C923 /* TTGLShaderService.m in Sources */,
 				A10AB79A164FB5FB0071C923 /* TTGLView.m in Sources */,
 				A10AB7A7165028860071C923 /* TTGLPatchGrid.m in Sources */,
 				A10AB7B91650EF8A0071C923 /* TTGLTextureFrameBuffer.m in Sources */,

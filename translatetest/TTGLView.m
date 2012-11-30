@@ -18,7 +18,7 @@
 #import "TTGLPatchGrid.h"
 #import "TTGLImage.h"
 #import "TTGLLabel.h"
-#import "TTShaderService.h"
+#import "TTGLShaderService.h"
 #import "TTGLTextureFrameBuffer.h"
 #import <GLKit/GLKit.h>
 
@@ -74,8 +74,10 @@
     [self setupRenderBuffer];
     [self setupFrameBuffer];
     
-//    GLfloat size = self.frame.size.height / self.frame.size.width;
-//    _projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), size, 0.01f, 1000.0f);
+    GLfloat size = self.frame.size.height / self.frame.size.width;
+    _projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), size, 0.01f, 1000.0f);
+//    self.projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), size, 0.01f, 1000.0f);
+//    self.projectionMatrix = GLKMatrix4Multiply(self.projectionMatrix, GLKMatrix4MakeFrustum(0.0f, 1.0f, -0.0f, 1.0f, 0.01f, 1000.0f));
     
     self.projectionMatrix = GLKMatrix4MakeOrtho(0.0f, 1.0f, -0.0f, 1.0f, 0.01f, 1000.0f);
     self.projectionMatrix = GLKMatrix4Multiply(_projectionMatrix, GLKMatrix4MakeLookAt(0, 0, 10, 0, 0, 0, 0, 1, 0));

@@ -73,7 +73,7 @@
 
 - (float)detailView:(TTGLView *)detailView scoreForPlayerAtIndex:(NSUInteger)index
 {
-    return 2000;//arc4random()%5000;
+    return arc4random()%5000;
 }
 
 @end

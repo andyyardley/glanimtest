@@ -7,7 +7,7 @@
 //
 
 #import "TTGLLabel.h"
-#import "TTShaderService.h"
+#import "TTGLShaderService.h"
 #import "TTGLTextureService.h"
 
 @implementation TTGLLabel
@@ -44,13 +44,11 @@
         if (CGSizeEqualToSize(size, CGSizeZero))
         {
             _size = [_text sizeWithFont:_font];
-//            size.width = powf(2.0f, ceilf(log2f(size.width)));
-//            size.height = powf(2.0f, ceilf(log2f(size.height)));
         }
         super.texture = [[TTGLTexture alloc] initWithSize:size drawingBlock:^(CGContextRef context) {
             
             [_textColor ?: [UIColor blackColor] setFill];
-            [_text drawInRect:CGRectMake(0.0f, 0.0f, _size.width, _size.height) withFont:_font];
+            [_text drawInRect:CGRectMake(0.0f, 1.0f, _size.width, _size.height+1.0f) withFont:_font];
         }];
     }
     return super.texture;

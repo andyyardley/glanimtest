@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class TTShaderProgram;
+@class TTGLShaderProgram;
 
 static NSString *kPositionAttribute     = @"Position";
 static NSString *kColorAttribute        = @"SourceColor";
@@ -27,19 +27,19 @@ static NSString *kHorizBlurTextureShader    = @"HorizBlurTextureShader";
 static NSString *kVertBlurTextureShader     = @"VertBlurTextureShader";
 static NSString *kReflectionTextureShader   = @"ReflectionTextureShader";
 
-@interface TTShaderService : NSObject
+@interface TTGLShaderService : NSObject
 
 + (id)sharedInstance;
 
-- (void)registerShader:(TTShaderProgram *)shader forKey:(NSString *)key;
-- (TTShaderProgram *)shaderForKey:(NSString *)key;
-- (TTShaderProgram *)activateShaderForKey:(NSString *)key;
+- (void)registerShader:(TTGLShaderProgram *)shader forKey:(NSString *)key;
+- (TTGLShaderProgram *)shaderForKey:(NSString *)key;
+- (TTGLShaderProgram *)activateShaderForKey:(NSString *)key;
 
 - (void)loadShader:(NSString *)fileName forKey:(NSString *)key;
 
 @end
 
-@interface TTShaderProgram : NSObject
+@interface TTGLShaderProgram : NSObject
 
 @property (nonatomic, assign) GLuint            program;
 

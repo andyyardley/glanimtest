@@ -6,19 +6,19 @@
 //  Copyright (c) 2012 Venalicium Ltd. All rights reserved.
 //
 
-#import "TTShaderService.h"
+#import "TTGLShaderService.h"
 
-@interface TTShaderService ()
+@interface TTGLShaderService ()
 
 @property (strong, nonatomic) NSMutableDictionary   *programs;
 @property (strong, nonatomic) NSString              *activeProgramKey;
-@property (strong, nonatomic) TTShaderProgram       *activeProgram;
+@property (strong, nonatomic) TTGLShaderProgram       *activeProgram;
 
 @end
 
-static TTShaderService *instance = nil;
+static TTGLShaderService *instance = nil;
 
-@implementation TTShaderService
+@implementation TTGLShaderService
 
 + (id)sharedInstance
 {
@@ -39,27 +39,27 @@ static TTShaderService *instance = nil;
 - (void)loadShader:(NSString *)fileName forKey:(NSString *)key
 {
     NSDate *startTime = [NSDate date];
-    TTShaderProgram *shader = [[TTShaderProgram alloc] initWithVertexShaderFile:[NSString stringWithFormat:@"%@Vertex", fileName] fragmentShaderFile:[NSString stringWithFormat:@"%@Fragment", fileName]];
+    TTGLShaderProgram *shader = [[TTGLShaderProgram alloc] initWithVertexShaderFile:[NSString stringWithFormat:@"%@Vertex", fileName] fragmentShaderFile:[NSString stringWithFormat:@"%@Fragment", fileName]];
     [self registerShader:shader forKey:key];
     NSLog(@"%@ Compile Time %f", key, [[NSDate date] timeIntervalSinceDate:startTime]);
 }
 
-- (void)registerShader:(TTShaderProgram *)shader forKey:(NSString *)key
+- (void)registerShader:(TTGLShaderProgram *)shader forKey:(NSString *)key
 {
     [_programs setObject:shader forKey:key];
 }
 
-- (TTShaderProgram *)shaderForKey:(NSString *)key
+- (TTGLShaderProgram *)shaderForKey:(NSString *)key
 {
-    TTShaderProgram *program = [_programs objectForKey:key];
+    TTGLShaderProgram *program = [_programs objectForKey:key];
     NSAssert(program != nil, key);
     return program;
 }
 
-- (TTShaderProgram *)activateShaderForKey:(NSString *)key
+- (TTGLShaderProgram *)activateShaderForKey:(NSString *)key
 {
     if (key != _activeProgramKey) {
-        TTShaderProgram *program = [self shaderForKey:key];
+        TTGLShaderProgram *program = [self shaderForKey:key];
         _activeProgram = program;
         _activeProgramKey = key;
         [program activate];
@@ -69,7 +69,7 @@ static TTShaderService *instance = nil;
 
 @end
 
-@interface TTShaderProgram()
+@interface TTGLShaderProgram()
 
 @property (nonatomic, assign) GLuint            fragShader;
 @property (nonatomic, assign) GLuint            vertShader;
@@ -78,7 +78,7 @@ static TTShaderService *instance = nil;
 
 @end
 
-@implementation TTShaderProgram
+@implementation TTGLShaderProgram
 
 #pragma mark -  OpenGL ES 2 shader compilation
 

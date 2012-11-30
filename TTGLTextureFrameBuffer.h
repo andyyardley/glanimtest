@@ -15,6 +15,7 @@
 @property (assign, nonatomic) GLuint        textureLocation;
 
 - (id)initWithWidth:(GLfloat)width height:(GLfloat)height;
+- (void)fillWithBlock:(void(^)(CGRect frame))executionBlock;
 - (void)begin;
 - (void)end;
 - (void)createNew;

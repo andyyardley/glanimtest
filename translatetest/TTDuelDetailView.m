@@ -11,7 +11,7 @@
 #import "TTGLImage.h"
 #import "TTGLLabel.h"
 #import "TTGLTextureFrameBuffer.h"
-#import "TTShaderService.h"
+#import "TTGLShaderService.h"
 
 #define GRID_COUNT 80
 #define PLAYER_COUNT 2
@@ -86,13 +86,13 @@
     _eq = (float*)malloc(GRID_COUNT * sizeof(float));
     
     // Load shaders
-    [[TTShaderService sharedInstance] loadShader:@"ColorBlend" forKey:kColorBlendShader];
-    [[TTShaderService sharedInstance] loadShader:@"ledMatrix" forKey:kLedMatrixShader];
-    [[TTShaderService sharedInstance] loadShader:@"SolidColor" forKey:kSolidColorShader];
-    [[TTShaderService sharedInstance] loadShader:@"SimpleTexture" forKey:kSimpleTextureShader];
-    [[TTShaderService sharedInstance] loadShader:@"HorizBlurTexture" forKey:kHorizBlurTextureShader];
-    [[TTShaderService sharedInstance] loadShader:@"VertBlurTexture" forKey:kVertBlurTextureShader];
-    [[TTShaderService sharedInstance] loadShader:@"ReflectionTexture" forKey:kReflectionTextureShader];
+    [[TTGLShaderService sharedInstance] loadShader:@"ColorBlend" forKey:kColorBlendShader];
+    [[TTGLShaderService sharedInstance] loadShader:@"ledMatrix" forKey:kLedMatrixShader];
+    [[TTGLShaderService sharedInstance] loadShader:@"SolidColor" forKey:kSolidColorShader];
+    [[TTGLShaderService sharedInstance] loadShader:@"SimpleTexture" forKey:kSimpleTextureShader];
+    [[TTGLShaderService sharedInstance] loadShader:@"HorizBlurTexture" forKey:kHorizBlurTextureShader];
+    [[TTGLShaderService sharedInstance] loadShader:@"VertBlurTexture" forKey:kVertBlurTextureShader];
+    [[TTGLShaderService sharedInstance] loadShader:@"ReflectionTexture" forKey:kReflectionTextureShader];
     
     _grids = [NSMutableArray array];
     
@@ -120,7 +120,7 @@
     _vertBlurGrid = [[TTGLPatchGrid alloc] initWithShaderName:kVertBlurTextureShader];
     _reflectionGrid = [[TTGLPatchGrid alloc] initWithShaderName:kReflectionTextureShader];
     
-    _leftScore = [TTGLLabel labelWithText:@"TEST" andFont:[UIFont systemFontOfSize:20.0f]];
+    _leftScore = [TTGLLabel labelWithText:@"TEST" andFont:[UIFont systemFontOfSize:20.0f]];//[UIFont fontWithName:@"ledcountdown" size:32]
     _leftScore.textColor = [UIColor whiteColor];
     
     _rightScore = [TTGLLabel labelWithText:@"TEST" andFont:[UIFont systemFontOfSize:20.0f]];

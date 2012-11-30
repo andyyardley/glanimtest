@@ -38,6 +38,13 @@
     
 }
 
+- (void)fillWithBlock:(void(^)(CGRect frame))executionBlock
+{
+    [self begin];
+    if (executionBlock) executionBlock(CGRectMake(0, 0, _width, _height));
+    [self end];
+}
+
 - (void)begin
 {
     
